@@ -7,10 +7,17 @@
 #include <QComboBox>
 #include <QPushButton>
 #include <QGridLayout>
-#include <QLineEdit>
+#include <QTextEdit>
+#include <QChar>
+#include <QDebug>
+#include <QObject>
+#include <QSerialPortInfo>
+#include <QSerialPort>
+#include <QTime>
+#include <QScrollBar>
+#include <QPlainTextEdit>
+#include <QCheckBox>
 
-/* MY CLASSES */
-#include "slavethread.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,10 +32,12 @@ public:
     ~MainWindow();
 
 private slots:
-    void startSlave();
-    void processError(const QString &s);
     void processTimeout(const QString &s);
-    void processData(QByteArray dataArray);
+    void processData();
+    void connectToPort();
+    void disconnectToPort();
+    void clearTextEdit();
+    void changeScrolling();
 
 private:
     Ui::MainWindow *ui;
@@ -39,13 +48,15 @@ private:
     QLabel * m_comPortLabel = nullptr; // "Serial port:"
     QLabel * m_rxDataLabel = nullptr; //  "RX data:"
     QComboBox * m_serialPortComboBox = nullptr; // drop-down list of all the available ports
-    QPushButton * m_refreshButton = nullptr; //  update the COM PORT drop-down list
+    QPushButton * m_disconnectButton = nullptr; //  disconnect from the port
     QPushButton * m_connectButton = nullptr; //  conect to the selected port and start receiving data (calls run())
-    QLineEdit * m_rxDataLineEdit = nullptr;
+    QPushButton * m_clearTextButton = nullptr;
+    QPlainTextEdit * m_rxDataPlainTextEdit = nullptr;
+    QScrollBar * m_bar = nullptr;
+    QSerialPort * m_serial = nullptr;
+    QCheckBox * m_autoscrollCheckBox = nullptr;
+    bool autoScroll = 1;
 
-    QByteArray rxData; // array of bytes holding data received on port
-
-    SlaveThread m_thread; // instance of our SlaveThreads, which continously reads data from the serialPORT
 };
 #endif // MAINWINDOW_H
 

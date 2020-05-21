@@ -7,7 +7,7 @@
 *****************************************************************************/
 
 #include <memory>
-#include "../../SerialInterface/mainwindow.h"
+#include "../../SerialInterfaceGUI/mainwindow.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[8];
-    char stringdata0[83];
+    QByteArrayData data[9];
+    char stringdata0[102];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -33,18 +33,19 @@ struct qt_meta_stringdata_MainWindow_t {
 static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_MainWindow = {
     {
 QT_MOC_LITERAL(0, 0, 10), // "MainWindow"
-QT_MOC_LITERAL(1, 11, 10), // "startSlave"
-QT_MOC_LITERAL(2, 22, 0), // ""
-QT_MOC_LITERAL(3, 23, 11), // "showRequest"
-QT_MOC_LITERAL(4, 35, 1), // "s"
-QT_MOC_LITERAL(5, 37, 12), // "processError"
-QT_MOC_LITERAL(6, 50, 14), // "processTimeout"
-QT_MOC_LITERAL(7, 65, 17) // "activateRunButton"
+QT_MOC_LITERAL(1, 11, 14), // "processTimeout"
+QT_MOC_LITERAL(2, 26, 0), // ""
+QT_MOC_LITERAL(3, 27, 1), // "s"
+QT_MOC_LITERAL(4, 29, 11), // "processData"
+QT_MOC_LITERAL(5, 41, 13), // "connectToPort"
+QT_MOC_LITERAL(6, 55, 16), // "disconnectToPort"
+QT_MOC_LITERAL(7, 72, 13), // "clearTextEdit"
+QT_MOC_LITERAL(8, 86, 15) // "changeScrolling"
 
     },
-    "MainWindow\0startSlave\0\0showRequest\0s\0"
-    "processError\0processTimeout\0"
-    "activateRunButton"
+    "MainWindow\0processTimeout\0\0s\0processData\0"
+    "connectToPort\0disconnectToPort\0"
+    "clearTextEdit\0changeScrolling"
 };
 #undef QT_MOC_LITERAL
 
@@ -54,7 +55,7 @@ static const uint qt_meta_data_MainWindow[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       6,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -62,17 +63,19 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   39,    2, 0x08 /* Private */,
-       3,    1,   40,    2, 0x08 /* Private */,
-       5,    1,   43,    2, 0x08 /* Private */,
-       6,    1,   46,    2, 0x08 /* Private */,
-       7,    0,   49,    2, 0x08 /* Private */,
+       1,    1,   44,    2, 0x08 /* Private */,
+       4,    0,   47,    2, 0x08 /* Private */,
+       5,    0,   48,    2, 0x08 /* Private */,
+       6,    0,   49,    2, 0x08 /* Private */,
+       7,    0,   50,    2, 0x08 /* Private */,
+       8,    0,   51,    2, 0x08 /* Private */,
 
  // slots: parameters
+    QMetaType::Void, QMetaType::QString,    3,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QString,    4,
-    QMetaType::Void, QMetaType::QString,    4,
-    QMetaType::Void, QMetaType::QString,    4,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -84,11 +87,12 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         auto *_t = static_cast<MainWindow *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->startSlave(); break;
-        case 1: _t->showRequest((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 2: _t->processError((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 3: _t->processTimeout((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 4: _t->activateRunButton(); break;
+        case 0: _t->processTimeout((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 1: _t->processData(); break;
+        case 2: _t->connectToPort(); break;
+        case 3: _t->disconnectToPort(); break;
+        case 4: _t->clearTextEdit(); break;
+        case 5: _t->changeScrolling(); break;
         default: ;
         }
     }
@@ -123,13 +127,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 6;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 5)
+        if (_id < 6)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 5;
+        _id -= 6;
     }
     return _id;
 }
