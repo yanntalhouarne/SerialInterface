@@ -18,6 +18,9 @@
 #include <QPlainTextEdit>
 #include <QCheckBox>
 
+/* MY CLASSES */
+#include "console.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -38,6 +41,7 @@ private slots:
     void disconnectToPort();
     void clearTextEdit();
     void changeScrolling();
+    void refreshPortList();
 
 private:
     Ui::MainWindow *ui;
@@ -51,11 +55,11 @@ private:
     QPushButton * m_disconnectButton = nullptr; //  disconnect from the port
     QPushButton * m_connectButton = nullptr; //  conect to the selected port and start receiving data (calls run())
     QPushButton * m_clearTextButton = nullptr;
-    QPlainTextEdit * m_rxDataPlainTextEdit = nullptr;
+    QPushButton * m_refreshPortListButton = nullptr;
+    Console * m_console = nullptr;
     QScrollBar * m_bar = nullptr;
     QSerialPort * m_serial = nullptr;
     QCheckBox * m_autoscrollCheckBox = nullptr;
-    bool autoScroll = 1;
 
 };
 #endif // MAINWINDOW_H

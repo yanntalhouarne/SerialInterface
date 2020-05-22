@@ -8,26 +8,20 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setWindowTitle(tr("COM Port"));
 
-    /* CREATE OBJECTS ON THJE HEAP */
+    /* CREATE OBJECTS ON THE HEAP */
     m_comPortLabel =  new QLabel("Serial port:", this);
     m_serialPortComboBox = new QComboBox(this);
     m_connectButton = new QPushButton("Connect", this);
     m_disconnectButton = new QPushButton("Disconnect", this);
     m_clearTextButton = new QPushButton("Clear", this);
     m_comStatusLabel =  new QLabel("Not connected.", this);
+    m_refreshPortListButton = new QPushButton("Refresh", this);
     m_rxDataLabel =  new QLabel("RX data:", this);
     m_serial = new QSerialPort(this);
+    m_console = new Console(this);
     m_autoscrollCheckBox = new QCheckBox("Auto-scroll", this);
     m_autoscrollCheckBox->setChecked(true);
 
-    /* text box for received data */
-    m_rxDataPlainTextEdit = new QPlainTextEdit(this);
-    m_rxDataPlainTextEdit->document()->setMaximumBlockCount(1000);
-    QPalette p = palette();
-    p.setColor(QPalette::Base, Qt::black);
-    p.setColor(QPalette::Text, Qt::green);
-    m_rxDataPlainTextEdit->setPalette(p);
-    m_rxDataPlainTextEdit->setReadOnly(true);
 
     /* SET LAYOUT */
     auto mainLayout = new QGridLayout;
@@ -35,11 +29,12 @@ MainWindow::MainWindow(QWidget *parent)
     mainLayout->addWidget(m_serialPortComboBox, 0, 1);
     mainLayout->addWidget(m_connectButton, 0, 2);
     mainLayout->addWidget(m_disconnectButton, 1, 2);
-    mainLayout->addWidget(m_clearTextButton, 2, 2);
+    mainLayout->addWidget(m_refreshPortListButton, 2, 2);
     mainLayout->addWidget(m_comStatusLabel, 2, 0);
     mainLayout->addWidget(m_rxDataLabel, 3, 0);
-    mainLayout->addWidget(m_autoscrollCheckBox, 3, 2);
-    mainLayout->addWidget(m_rxDataPlainTextEdit, 3, 1);
+    mainLayout->addWidget(m_autoscrollCheckBox, 3, 2, 10, 1);
+    mainLayout->addWidget(m_clearTextButton, 3, 2, 1, 2);
+    mainLayout->addWidget(m_console, 3, 1);
     QWidget * widget = new QWidget(this);
     widget->setLayout(mainLayout);
     setCentralWidget(widget);
@@ -54,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_connectButton, &QPushButton::clicked, this, &MainWindow::connectToPort);
     connect(m_disconnectButton, &QPushButton::clicked, this, &MainWindow::disconnectToPort);
     connect(m_clearTextButton, &QPushButton::clicked, this, &MainWindow::clearTextEdit);
+    connect(m_refreshPortListButton, &QPushButton::clicked, this, &MainWindow::refreshPortList);
     connect(m_autoscrollCheckBox, &QCheckBox::stateChanged, this, &MainWindow::changeScrolling);
     connect(m_serial, &QSerialPort::readyRead, this, &MainWindow::processData);
 
@@ -100,34 +96,31 @@ void MainWindow::processTimeout(const QString &s)
 
 void MainWindow::processData()
 {
-    QString rxData = m_serial->readAll();
-    m_rxDataPlainTextEdit->insertPlainText(rxData);
-
-    if ((rxData[0] == "2") && (rxData[1] == "0"))
-    {
-        m_rxDataPlainTextEdit->insertPlainText("Glenda sucks \n");
-    }
-
-    if (autoScroll)
-    {
-        QScrollBar *bar = m_rxDataPlainTextEdit->verticalScrollBar();
-        bar->setValue(bar->maximum());
-    }
+    const QByteArray rxData = m_serial->readAll();
+    m_console->putData(rxData);
 }
 
 void MainWindow::clearTextEdit()
 {
-    m_rxDataPlainTextEdit->clear();
+    m_console->clear();
 }
 
 void MainWindow::changeScrolling()
 {
     if (m_autoscrollCheckBox->isChecked())
     {
-        autoScroll = 1;
+        m_console->autoScroll = 1;
     }
     else
     {
-        autoScroll = 0;
+        m_console->autoScroll = 0;
     }
+}
+
+void MainWindow::refreshPortList()
+{
+    m_serialPortComboBox->clear();
+    const auto infos = QSerialPortInfo::availablePorts();
+    for (const QSerialPortInfo &info : infos)
+        m_serialPortComboBox->addItem(info.portName());
 }
