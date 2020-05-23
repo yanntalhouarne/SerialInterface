@@ -20,6 +20,7 @@
 
 /* MY CLASSES */
 #include "console.h"
+#include "serialportsettings.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -35,7 +36,6 @@ public:
     ~MainWindow();
 
 private slots:
-    void processTimeout(const QString &s);
     void processData();
     void connectToPort();
     void disconnectToPort();
@@ -44,23 +44,10 @@ private slots:
     void refreshPortList();
 
 private:
-    Ui::MainWindow *ui;
-
-    int m_transactionCount = 0;
-
-    QLabel * m_comStatusLabel = nullptr; // Not connected, Connected or Failed
-    QLabel * m_comPortLabel = nullptr; // "Serial port:"
-    QLabel * m_rxDataLabel = nullptr; //  "RX data:"
-    QComboBox * m_serialPortComboBox = nullptr; // drop-down list of all the available ports
-    QPushButton * m_disconnectButton = nullptr; //  disconnect from the port
-    QPushButton * m_connectButton = nullptr; //  conect to the selected port and start receiving data (calls run())
-    QPushButton * m_clearTextButton = nullptr;
-    QPushButton * m_refreshPortListButton = nullptr;
-    Console * m_console = nullptr;
-    QScrollBar * m_bar = nullptr;
+    Ui::MainWindow * ui;
+    //Console * m_console = nullptr;
     QSerialPort * m_serial = nullptr;
-    QCheckBox * m_autoscrollCheckBox = nullptr;
-
+    serialPortSettingsDialog * m_settings = nullptr;
 };
 #endif // MAINWINDOW_H
 
