@@ -12,8 +12,8 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>465</width>
-    <height>424</height>
+    <width>620</width>
+    <height>496</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -35,13 +35,13 @@
     <property name="autoFillBackground">
      <bool>false</bool>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>10</y>
        <width>531</width>
-       <height>41</height>
+       <height>44</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout">
@@ -56,17 +56,17 @@
         </item>
        </layout>
       </item>
+      <item row="0" column="5">
+       <widget class="QPushButton" name="RefreshButton">
+        <property name="text">
+         <string>Refresh</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="2" alignment="Qt::AlignTop">
        <widget class="QComboBox" name="term_comboBox">
         <property name="currentIndex">
          <number>-1</number>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" alignment="Qt::AlignTop">
-       <widget class="QLabel" name="term_comboBoxLabel">
-        <property name="text">
-         <string>Available ports:</string>
         </property>
        </widget>
       </item>
@@ -77,10 +77,10 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="5">
-       <widget class="QPushButton" name="RefreshButton">
+      <item row="0" column="0">
+       <widget class="QLabel" name="term_comboBoxLabel">
         <property name="text">
-         <string>Refresh</string>
+         <string>Available ports:</string>
         </property>
        </widget>
       </item>
@@ -93,11 +93,11 @@
       <x>20</x>
       <y>50</y>
       <width>551</width>
-      <height>401</height>
+      <height>411</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item alignment="Qt::AlignLeft|Qt::AlignTop">
+     <item>
       <widget class="QLabel" name="consoleStatusLabel">
        <property name="cursor">
         <cursorShape>ArrowCursor</cursorShape>
@@ -121,11 +121,28 @@
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="autoscroll">
-       <property name="text">
-        <string>autoscroll</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QCheckBox" name="autoscroll">
+         <property name="text">
+          <string>auto-scroll</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="clearButton">
+         <property name="maximumSize">
+          <size>
+           <width>74</width>
+           <height>21</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Clear</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </widget>

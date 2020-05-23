@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //m_console = new Console(ui->ConsoleWidget);
     m_serial = new QSerialPort(this);
+    ui->autoscroll->setChecked(true);
     m_settings = new serialPortSettingsDialog(this);
     m_settings->setDefault();
 
@@ -26,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionDisconnect, &QAction::triggered, this, &MainWindow::disconnectToPort);
     connect(ui->actionClear, &QAction::triggered, this, &MainWindow::clearTextEdit);
     connect(ui->actionConfigurePort, &QAction::triggered, m_settings, &serialPortSettingsDialog::show);
+    connect(ui->actionToggle_Auto_Scroll, &QAction::triggered, ui->autoscroll, &QCheckBox::toggle);
 
     /* TERMINAL WIDGET */
     connect(ui->ConnectButton, &QPushButton::clicked, this, &MainWindow::connectToPort);
@@ -33,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->RefreshButton, &QPushButton::clicked, this, &MainWindow::refreshPortList);
     connect(m_serial, &QSerialPort::readyRead, this, &MainWindow::processData);
     connect(ui->autoscroll, &QCheckBox::stateChanged, this, &MainWindow::changeScrolling);
+    connect(ui->clearButton, &QPushButton::clicked, this, &MainWindow::clearTextEdit);
 
 
 
@@ -64,7 +67,7 @@ void MainWindow::connectToPort()
     }
     else
     {
-        ui->consoleStatusLabel->setText(tr("Connected to %1 (BaudRate: %2, DataBits: %3, Parity: %4, StopBits: %5, FlowCtl: %6)")
+        ui->consoleStatusLabel->setText(tr("Connected to %1.      (BaudRate: %2, DataBits: %3, Parity: %4, StopBits: %5, FlowCtl: %6)")
                     .arg(p.name).arg(p.stringBaudRate).arg(p.stringDataBits)
                     .arg(p.stringParity).arg(p.stringStopBits).arg(p.stringFlowControl));
     }
