@@ -49,7 +49,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::connectToPort()
 {
-
     m_serial->close(); // close all other ports (if no PORT is open, this function can still be called)
     m_settings->setPort(ui->term_comboBox->currentText()); // set the current port in the combo box to the current settings
     m_serial->setPortName(ui->term_comboBox->currentText());
@@ -62,14 +61,19 @@ void MainWindow::connectToPort()
     if (!m_serial->open(QIODevice::ReadWrite))     // open the PORT, emit the error signal if failed
     {
         ui->consoleStatusLabel->setText(tr("Can't open %1, error code %2")
-                   .arg(m_serial->portName()).arg(m_serial->error()));
+                   .arg(m_serial->portName())
+                   .arg(m_serial->error()));
         return;
     }
     else
     {
         ui->consoleStatusLabel->setText(tr("Connected to %1.      (BaudRate: %2, DataBits: %3, Parity: %4, StopBits: %5, FlowCtl: %6)")
-                    .arg(p.name).arg(p.stringBaudRate).arg(p.stringDataBits)
-                    .arg(p.stringParity).arg(p.stringStopBits).arg(p.stringFlowControl));
+                    .arg(p.name)
+                    .arg(p.stringBaudRate)
+                    .arg(p.stringDataBits)
+                    .arg(p.stringParity)
+                    .arg(p.stringStopBits)
+                    .arg(p.stringFlowControl));
     }
 }
 
@@ -93,19 +97,20 @@ void MainWindow::clearTextEdit()
 void MainWindow::changeScrolling()
 {
     if (ui->autoscroll->isChecked())
-    {
         ui->m_console->autoScroll = 1;
-    }
     else
-    {
         ui->m_console->autoScroll = 0;
-    }
 }
 
+/* Refresh combo boxes */
 void MainWindow::refreshPortList()
 {
+    // refresh MainWindow combobox
     ui->term_comboBox->clear();
     const auto infos = QSerialPortInfo::availablePorts();
     for (const QSerialPortInfo &info : infos)
         ui->term_comboBox->addItem(info.portName());
+
+    // refresh Settings combobox
+    m_settings->fillPortsInfo();
 }

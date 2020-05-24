@@ -51,10 +51,10 @@ private:
     Ui::portSettingsDialog * ui = nullptr;
     void updateSettings();
     void fillPortsParameters();
-    void fillPortsInfo();
     Settings m_currentSettings;
 
 public:
+        void fillPortsInfo();
     QString getCurrentName();
     qint32 getCurrentBaudRate();
     QSerialPort::DataBits getCurrentDatabits();

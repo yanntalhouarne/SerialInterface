@@ -45,7 +45,6 @@ private slots:
 
 private:
     Ui::MainWindow * ui;
-    //Console * m_console = nullptr;
     QSerialPort * m_serial = nullptr;
     serialPortSettingsDialog * m_settings = nullptr;
 };

@@ -19,15 +19,10 @@ void Console::putData(const QByteArray &data)
 
     if (autoScroll)
     {
-        QScrollBar *bar = verticalScrollBar();
+        QScrollBar * bar = verticalScrollBar();
         bar->setValue(bar->maximum());
     }
 }
-
-//void Console::setLocalEchwwwoEnabled(bool set)
-//{
-//    m_localEchoEnabled = set;
-//}
 
 void Console::keyPressEvent(QKeyEvent *e)
 {
@@ -60,4 +55,9 @@ void Console::mouseDoubleClickEvent(QMouseEvent *e)
 //void Console::contextMenuEvent(QContextMenuEvent *e)
 //{
 //    Q_UNUSED(e)
+//}
+
+//void Console::setLocalEchwwwoEnabled(bool set)
+//{
+//    m_localEchoEnabled = set;
 //}
