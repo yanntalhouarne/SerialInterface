@@ -25,6 +25,7 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "console.h"
+#include "qcustomplot.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -53,8 +54,13 @@ public:
     QLabel *consoleStatusLabel;
     Console *m_console;
     QHBoxLayout *horizontalLayout_2;
+    QCheckBox *printCheckBox;
     QCheckBox *autoscroll;
     QPushButton *clearButton;
+    QWidget *plotWidget;
+    QCustomPlot *plot;
+    QPushButton *clearPlot;
+    QCheckBox *plotCheckBox;
     QMenuBar *menubar;
     QMenu *menuPort;
     QMenu *menuConsole;
@@ -65,7 +71,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(620, 496);
+        MainWindow->resize(1186, 496);
         MainWindow->setMinimumSize(QSize(620, 496));
         MainWindow->setAutoFillBackground(false);
         actionConnect = new QAction(MainWindow);
@@ -145,6 +151,11 @@ public:
 
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        printCheckBox = new QCheckBox(ConsoleWidget);
+        printCheckBox->setObjectName(QString::fromUtf8("printCheckBox"));
+
+        horizontalLayout_2->addWidget(printCheckBox);
+
         autoscroll = new QCheckBox(ConsoleWidget);
         autoscroll->setObjectName(QString::fromUtf8("autoscroll"));
 
@@ -159,10 +170,23 @@ public:
 
         verticalLayout_2->addLayout(horizontalLayout_2);
 
+        plotWidget = new QWidget(centralwidget);
+        plotWidget->setObjectName(QString::fromUtf8("plotWidget"));
+        plotWidget->setGeometry(QRect(590, 80, 501, 371));
+        plot = new QCustomPlot(plotWidget);
+        plot->setObjectName(QString::fromUtf8("plot"));
+        plot->setGeometry(QRect(10, 0, 521, 341));
+        plot->setMinimumSize(QSize(521, 311));
+        clearPlot = new QPushButton(plotWidget);
+        clearPlot->setObjectName(QString::fromUtf8("clearPlot"));
+        clearPlot->setGeometry(QRect(420, 350, 80, 21));
+        plotCheckBox = new QCheckBox(plotWidget);
+        plotCheckBox->setObjectName(QString::fromUtf8("plotCheckBox"));
+        plotCheckBox->setGeometry(QRect(10, 350, 72, 19));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 620, 20));
+        menubar->setGeometry(QRect(0, 0, 1186, 20));
         menuPort = new QMenu(menubar);
         menuPort->setObjectName(QString::fromUtf8("menuPort"));
         menuConsole = new QMenu(menubar);
@@ -208,8 +232,11 @@ public:
         DisconnectButton->setText(QCoreApplication::translate("MainWindow", "Disconnect", nullptr));
         term_comboBoxLabel->setText(QCoreApplication::translate("MainWindow", "Available ports:", nullptr));
         consoleStatusLabel->setText(QCoreApplication::translate("MainWindow", "Status:", nullptr));
+        printCheckBox->setText(QCoreApplication::translate("MainWindow", "Print", nullptr));
         autoscroll->setText(QCoreApplication::translate("MainWindow", "auto-scroll", nullptr));
         clearButton->setText(QCoreApplication::translate("MainWindow", "Clear", nullptr));
+        clearPlot->setText(QCoreApplication::translate("MainWindow", "Clear", nullptr));
+        plotCheckBox->setText(QCoreApplication::translate("MainWindow", "Plot", nullptr));
         menuPort->setTitle(QCoreApplication::translate("MainWindow", "Port", nullptr));
         menuConsole->setTitle(QCoreApplication::translate("MainWindow", "Console", nullptr));
         menuConfigure->setTitle(QCoreApplication::translate("MainWindow", "Settings", nullptr));

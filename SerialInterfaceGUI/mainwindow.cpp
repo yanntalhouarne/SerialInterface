@@ -20,6 +20,12 @@ MainWindow::MainWindow(QWidget *parent)
     for (const QSerialPortInfo &info : infos)
         ui->term_comboBox->addItem(info.portName());
 
+
+    /* Set up plot */
+    ui->plot->addGraph();
+    ui->plot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+    ui->plot->graph(0)->setLineStyle(QCPGraph::lsLine);
+
     /* CONNECT QACTIONS */
     /* MENU */
     connect(ui->actionConnect, &QAction::triggered, this, &MainWindow::connectToPort);
@@ -37,7 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->autoscroll, &QCheckBox::stateChanged, this, &MainWindow::changeScrolling);
     connect(ui->clearButton, &QPushButton::clicked, this, &MainWindow::clearTextEdit);
 
-
+    /* PLOT WIDGET */
+    connect(ui->clearPlot, &QPushButton::clicked, this, &MainWindow::clearData);
 
 }
 
@@ -85,8 +92,22 @@ void MainWindow::disconnectToPort()
 
 void MainWindow::processData()
 {
+    // get the data as a byte array
     const QByteArray rxData = m_serial->readAll();
-    ui->m_console->putData(rxData);
+    // update console
+    if (ui->printCheckBox->isChecked())
+    {
+        ui->m_console->putData(rxData);
+    }
+    // update plot
+    static double x = 0;
+    double y = rxData.toDouble();
+    if (ui->plotCheckBox->isChecked())
+    {
+        addPoint(x, y);
+        plot();
+        x++;
+    }
 }
 
 void MainWindow::clearTextEdit()
@@ -114,3 +135,27 @@ void MainWindow::refreshPortList()
     // refresh Settings combobox
     m_settings->fillPortsInfo();
 }
+
+/* PLOTTING FUNCTIONS */
+void MainWindow::addPoint(double x, double y)
+{
+    qv_x.append(x);
+    qv_y.append(y);
+    ui->plot->rescaleAxes(0);
+}
+
+void MainWindow::clearData()
+{
+    qv_x.clear();
+    qv_y.clear();
+
+}
+
+void MainWindow::plot()
+{
+    ui->plot->graph(0)->setData(qv_x, qv_y);
+    ui->plot->replot();
+    ui->plot->update();
+}
+
+

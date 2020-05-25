@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>620</width>
+    <width>1186</width>
     <height>496</height>
    </rect>
   </property>
@@ -123,6 +123,13 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
+        <widget class="QCheckBox" name="printCheckBox">
+         <property name="text">
+          <string>Print</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QCheckBox" name="autoscroll">
          <property name="text">
           <string>auto-scroll</string>
@@ -146,13 +153,65 @@
      </item>
     </layout>
    </widget>
+   <widget class="QWidget" name="plotWidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>80</y>
+      <width>501</width>
+      <height>371</height>
+     </rect>
+    </property>
+    <widget class="QCustomPlot" name="plot" native="true">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>521</width>
+       <height>341</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>521</width>
+       <height>311</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="clearPlot">
+     <property name="geometry">
+      <rect>
+       <x>420</x>
+       <y>350</y>
+       <width>80</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Clear</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="plotCheckBox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>350</y>
+       <width>72</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Plot</string>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>620</width>
+     <width>1186</width>
      <height>20</height>
     </rect>
    </property>
@@ -220,6 +279,12 @@
   </action>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>Console</class>
    <extends>QPlainTextEdit</extends>

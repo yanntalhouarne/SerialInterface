@@ -18,9 +18,13 @@
 #include <QPlainTextEdit>
 #include <QCheckBox>
 
+
 /* MY CLASSES */
 #include "console.h"
 #include "serialportsettings.h"
+
+/* THIRD PARTY */
+#include "qcustomplot.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -35,6 +39,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    /* PLOTING */
+    void addPoint(double x, double y);
+    void clearData();
+    void plot();
+
 private slots:
     void processData();
     void connectToPort();
@@ -47,6 +56,8 @@ private:
     Ui::MainWindow * ui;
     QSerialPort * m_serial = nullptr;
     serialPortSettingsDialog * m_settings = nullptr;
+    QVector<double> qv_x, qv_y; // for plotting
+
 };
 #endif // MAINWINDOW_H
 
