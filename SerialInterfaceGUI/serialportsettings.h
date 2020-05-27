@@ -54,7 +54,7 @@ private:
     Settings m_currentSettings;
 
 public:
-        void fillPortsInfo();
+    void fillPortsInfo();
     QString getCurrentName();
     qint32 getCurrentBaudRate();
     QSerialPort::DataBits getCurrentDatabits();

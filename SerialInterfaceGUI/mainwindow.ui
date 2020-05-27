@@ -230,6 +230,7 @@
     </property>
     <addaction name="actionClear"/>
     <addaction name="actionToggle_Auto_Scroll"/>
+    <addaction name="actionParsing"/>
    </widget>
    <widget class="QMenu" name="menuConfigure">
     <property name="title">
@@ -275,6 +276,14 @@
   <action name="actionConfigurePort">
    <property name="text">
     <string>Configure</string>
+   </property>
+  </action>
+  <action name="actionParsing">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Parsing settings</string>
    </property>
   </action>
  </widget>

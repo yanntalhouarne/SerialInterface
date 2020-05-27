@@ -22,6 +22,7 @@
 /* MY CLASSES */
 #include "console.h"
 #include "serialportsettings.h"
+#include "serialparsingsettingsdialog.h"
 
 /* THIRD PARTY */
 #include "qcustomplot.h"
@@ -56,6 +57,7 @@ private:
     Ui::MainWindow * ui;
     QSerialPort * m_serial = nullptr;
     serialPortSettingsDialog * m_settings = nullptr;
+    serialParsingSettingsDialog * m_parsingSettingsDialog = nullptr;
     QVector<double> qv_x, qv_y; // for plotting
 
 };

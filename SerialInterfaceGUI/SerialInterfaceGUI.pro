@@ -8,6 +8,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
 
+RC_ICONS = app_icon.ico
+
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -24,16 +26,19 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     qcustomplot.cpp \
+    serialparsingsettingsdialog.cpp \
     serialportsettings.cpp
 
 HEADERS += \
     console.h \
     mainwindow.h \
     qcustomplot.h \
+    serialparsingsettingsdialog.h \
     serialportsettings.h
 
 FORMS += \
     mainwindow.ui \
+    parsingSettingsDialog.ui \
     portSettingsDialog.ui
 
 # Default rules for deployment.

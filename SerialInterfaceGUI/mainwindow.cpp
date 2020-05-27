@@ -15,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_settings = new serialPortSettingsDialog(this);
     m_settings->setDefault();
 
+    m_parsingSettingsDialog = new serialParsingSettingsDialog(this);
+
     /* POPULATE COMBO BOX WITH AVAILABLE COM PORTS */
     const auto infos = QSerialPortInfo::availablePorts();
     for (const QSerialPortInfo &info : infos)
@@ -28,12 +30,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     /* CONNECT QACTIONS */
     /* MENU */
+
     connect(ui->actionConnect, &QAction::triggered, this, &MainWindow::connectToPort);
     connect(ui->actionRefresh, &QAction::triggered, this, &MainWindow::refreshPortList);
     connect(ui->actionDisconnect, &QAction::triggered, this, &MainWindow::disconnectToPort);
     connect(ui->actionClear, &QAction::triggered, this, &MainWindow::clearTextEdit);
     connect(ui->actionConfigurePort, &QAction::triggered, m_settings, &serialPortSettingsDialog::show);
     connect(ui->actionToggle_Auto_Scroll, &QAction::triggered, ui->autoscroll, &QCheckBox::toggle);
+
+    connect(ui->actionParsing, &QAction::triggered, m_parsingSettingsDialog, &serialParsingSettingsDialog::show);
 
     /* TERMINAL WIDGET */
     connect(ui->ConnectButton, &QPushButton::clicked, this, &MainWindow::connectToPort);
@@ -92,22 +97,114 @@ void MainWindow::disconnectToPort()
 
 void MainWindow::processData()
 {
+    // get the parsing settings
+    const serialParsingSettingsDialog::parsingSettings p = m_parsingSettingsDialog->getParsingSettings();
+
     // get the data as a byte array
     const QByteArray rxData = m_serial->readAll();
-    // update console
-    if (ui->printCheckBox->isChecked())
-    {
-        ui->m_console->putData(rxData);
-    }
-    // update plot
+
+    // trailing check variable
+    char trailingChar = 0;
+
+    // x-y value for the plot
     static double x = 0;
-    double y = rxData.toDouble();
-    if (ui->plotCheckBox->isChecked())
+    double y = 0;
+
+    // update console
+    switch (p.dataFormat)
     {
-        addPoint(x, y);
-        plot();
-        x++;
+        case 0: // ASCII
+        {
+            if (ui->printCheckBox->isChecked())
+            {
+                ui->m_console->putData(rxData);
+            }
+            // update plot
+            y = rxData.toDouble(); // convert from ASCII character to a double value
+            if (ui->plotCheckBox->isChecked())
+            {
+                addPoint(x, y);
+                plot();
+            }
+            break;
+        } // end of: case 0: ASCII
+        case 1: // RAW
+        {
+            long Data = 0;
+            switch (p.byteNbr)
+            {
+                case 1:
+                {
+                    if (rxData.size() >= 2)
+                    {
+                       Data = ((0x000000FF)&(rxData[0]));
+                       trailingChar = rxData[1];
+                    }
+                    break;
+                }
+                case 2:
+                {
+                    if (rxData.size() >= 3)
+                    {
+                       Data = ((0x000000FF)&(rxData[0])) | ((0x0000FF00)&(rxData[1]<<8));
+                       trailingChar = rxData[2];
+                    }
+                    break;
+                }
+                case 3:
+                {
+                    if (rxData.size() >= 4)
+                    {
+                       Data = ((0x000000FF)&(rxData[0])) | ((0x0000FF00)&(rxData[1]<<8)) | ((0x00FF0000)&(rxData[2]<<16));
+                       trailingChar = rxData[3];
+                    }
+                    break;
+                }
+                case 4:
+                {
+                    if (rxData.size() >= 5)
+                    {
+                       Data = ((0x000000FF)&(rxData[0])) | ((0x0000FF00)&(rxData[1]<<8)) | ((0x00FF0000)&(rxData[2]<<16)) | ((0xFF000000)&(rxData[3]<<24));
+                       trailingChar = rxData[4];
+                    }
+                    break;
+                }
+                default:
+                    break;
+            } // end of: switch (p.byteNbr)
+            QString strAscii = QString::number(Data);
+            QByteArray baAscii = strAscii.toUtf8();
+            baAscii.append(13);
+            // update console
+            if (ui->printCheckBox->isChecked())
+            {
+                if (trailingChar == 13) // check trailing character is NL
+                    ui->m_console->putData(baAscii);
+            }
+
+            // update plot
+            y = Data; // convert from ASCII character to a double value
+            if (ui->plotCheckBox->isChecked())
+            {
+                if (trailingChar == 13) // check trailing character is NL
+                {
+                    addPoint(x, y);
+                    plot();
+                }
+            }
+        break;
+        } // end of: case 1: RAW
+        default:
+        break;
+    } // end of: switch (p.dataFormat)
+
+    // INCREMENT X VALUE
+    if (x > 2000)
+    {
+        x = 0;
+        clearData();
     }
+    x++;
 }
 
 void MainWindow::clearTextEdit()
