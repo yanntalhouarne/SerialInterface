@@ -204,6 +204,29 @@
       <string>Plot</string>
      </property>
     </widget>
+    <widget class="QLabel" name="axisRangeLabel">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>350</y>
+       <width>61</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>x-axis range:</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="axisRangeSpinBox">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>350</y>
+       <width>51</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

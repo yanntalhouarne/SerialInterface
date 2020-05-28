@@ -21,6 +21,7 @@
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -62,6 +63,8 @@ public:
     QCustomPlot *plot;
     QPushButton *clearPlot;
     QCheckBox *plotCheckBox;
+    QLabel *axisRangeLabel;
+    QSpinBox *axisRangeSpinBox;
     QMenuBar *menubar;
     QMenu *menuPort;
     QMenu *menuConsole;
@@ -187,6 +190,12 @@ public:
         plotCheckBox = new QCheckBox(plotWidget);
         plotCheckBox->setObjectName(QString::fromUtf8("plotCheckBox"));
         plotCheckBox->setGeometry(QRect(10, 350, 72, 19));
+        axisRangeLabel = new QLabel(plotWidget);
+        axisRangeLabel->setObjectName(QString::fromUtf8("axisRangeLabel"));
+        axisRangeLabel->setGeometry(QRect(140, 350, 61, 20));
+        axisRangeSpinBox = new QSpinBox(plotWidget);
+        axisRangeSpinBox->setObjectName(QString::fromUtf8("axisRangeSpinBox"));
+        axisRangeSpinBox->setGeometry(QRect(210, 350, 51, 22));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -243,6 +252,7 @@ public:
         clearButton->setText(QCoreApplication::translate("MainWindow", "Clear", nullptr));
         clearPlot->setText(QCoreApplication::translate("MainWindow", "Clear", nullptr));
         plotCheckBox->setText(QCoreApplication::translate("MainWindow", "Plot", nullptr));
+        axisRangeLabel->setText(QCoreApplication::translate("MainWindow", "x-axis range:", nullptr));
         menuPort->setTitle(QCoreApplication::translate("MainWindow", "Port", nullptr));
         menuConsole->setTitle(QCoreApplication::translate("MainWindow", "Console", nullptr));
         menuConfigure->setTitle(QCoreApplication::translate("MainWindow", "Settings", nullptr));

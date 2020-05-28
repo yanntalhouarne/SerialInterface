@@ -17,6 +17,7 @@
 #include <QScrollBar>
 #include <QPlainTextEdit>
 #include <QCheckBox>
+#include <QSpinBox>
 
 
 /* MY CLASSES */
@@ -52,6 +53,7 @@ private slots:
     void clearTextEdit();
     void changeScrolling();
     void refreshPortList();
+    void changeAxisRange(int val);
 
 private:
     Ui::MainWindow * ui;
@@ -59,6 +61,7 @@ private:
     serialPortSettingsDialog * m_settings = nullptr;
     serialParsingSettingsDialog * m_parsingSettingsDialog = nullptr;
     QVector<double> qv_x, qv_y; // for plotting
+    int xAxisRange = 0;
 
 };
 #endif // MAINWINDOW_H

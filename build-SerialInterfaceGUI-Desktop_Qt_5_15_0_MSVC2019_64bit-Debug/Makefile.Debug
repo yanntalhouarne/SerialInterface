@@ -490,6 +490,8 @@ debug\moc_mainwindow.cpp: ..\SerialInterfaceGUI\mainwindow.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qfontdatabase.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QCheckBox \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qcheckbox.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QSpinBox \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qspinbox.h \
 		..\SerialInterfaceGUI\console.h \
 		..\SerialInterfaceGUI\serialportsettings.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QWidget \
@@ -823,7 +825,6 @@ debug\moc_mainwindow.cpp: ..\SerialInterfaceGUI\mainwindow.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QVariant \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qshortcut.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qsizegrip.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qspinbox.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qsplashscreen.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qsplitter.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qstackedlayout.h \
@@ -2569,6 +2570,8 @@ debug\main.obj: ..\SerialInterfaceGUI\main.cpp ..\SerialInterfaceGUI\mainwindow.
 		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qfontdatabase.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QCheckBox \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qcheckbox.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QSpinBox \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qspinbox.h \
 		..\SerialInterfaceGUI\console.h \
 		..\SerialInterfaceGUI\serialportsettings.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QWidget \
@@ -2902,7 +2905,6 @@ debug\main.obj: ..\SerialInterfaceGUI\main.cpp ..\SerialInterfaceGUI\mainwindow.
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QVariant \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qshortcut.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qsizegrip.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qspinbox.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qsplashscreen.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qsplitter.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qstackedlayout.h \
@@ -3104,6 +3106,8 @@ debug\mainwindow.obj: ..\SerialInterfaceGUI\mainwindow.cpp ..\SerialInterfaceGUI
 		C:\Qt\5.15.0\msvc2019_64\include\QtGui\qfontdatabase.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QCheckBox \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qcheckbox.h \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QSpinBox \
+		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qspinbox.h \
 		..\SerialInterfaceGUI\console.h \
 		..\SerialInterfaceGUI\serialportsettings.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\QWidget \
@@ -3437,7 +3441,6 @@ debug\mainwindow.obj: ..\SerialInterfaceGUI\mainwindow.cpp ..\SerialInterfaceGUI
 		C:\Qt\5.15.0\msvc2019_64\include\QtCore\QVariant \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qshortcut.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qsizegrip.h \
-		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qspinbox.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qsplashscreen.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qsplitter.h \
 		C:\Qt\5.15.0\msvc2019_64\include\QtWidgets\qstackedlayout.h \

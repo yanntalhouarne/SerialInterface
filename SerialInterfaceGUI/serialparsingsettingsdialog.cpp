@@ -9,7 +9,7 @@ serialParsingSettingsDialog::serialParsingSettingsDialog(QWidget *parent)
 
     // DATA FORMAT COMBO BOX INIT
     ui->dataFormatComboBox->addItem("ASCII");
-    ui->dataFormatComboBox->addItem("RAW");
+    ui->dataFormatComboBox->addItem("raw");
     ui->dataFormatComboBox->setCurrentIndex(0);
 
 
@@ -19,6 +19,8 @@ serialParsingSettingsDialog::serialParsingSettingsDialog(QWidget *parent)
     ui->nbrBytesComboBox->addItem("4");
     ui->dataFormatComboBox->setCurrentIndex(0);
     ui->nbrBytesComboBox->setDisabled(1);
+
+    applyParsingSettings();
 
     connect(ui->dataFormatComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
             this, &serialParsingSettingsDialog::showByteNbr);
@@ -34,7 +36,6 @@ serialParsingSettingsDialog::~serialParsingSettingsDialog()
 void serialParsingSettingsDialog::applyParsingSettings()
 {
    m_parsingSettings.dataFormat = ui->dataFormatComboBox->currentIndex();
-   m_parsingSettings.byteNbr = ui->nbrBytesComboBox->currentIndex() + 1;
    m_parsingSettings.byteNbr = ui->nbrBytesComboBox->currentText().toUInt();
    hide();
 }

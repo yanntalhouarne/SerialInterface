@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_parsingSettingsDialog = new serialParsingSettingsDialog(this);
 
+
     /* POPULATE COMBO BOX WITH AVAILABLE COM PORTS */
     const auto infos = QSerialPortInfo::availablePorts();
     for (const QSerialPortInfo &info : infos)
@@ -25,8 +26,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     /* Set up plot */
     ui->plot->addGraph();
-    ui->plot->graph(0)->setScatterStyle(QCPScatterStyle::ssCircle);
+    ui->plot->graph(0)->setScatterStyle(QCPScatterStyle::ssNone);
     ui->plot->graph(0)->setLineStyle(QCPGraph::lsLine);
+    ui->axisRangeSpinBox->setMaximum(100000);
+    ui->axisRangeSpinBox->setMinimum(5);
 
     /* CONNECT QACTIONS */
     /* MENU */
@@ -50,6 +53,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     /* PLOT WIDGET */
     connect(ui->clearPlot, &QPushButton::clicked, this, &MainWindow::clearData);
+    connect(ui->axisRangeSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::changeAxisRange);
+    connect(ui->axisRangeSpinBox, &QSpinBox::editingFinished, ui->axisRangeSpinBox, &QSpinBox::clearFocus);
 
 }
 
@@ -238,7 +243,20 @@ void MainWindow::addPoint(double x, double y)
 {
     qv_x.append(x);
     qv_y.append(y);
-    ui->plot->rescaleAxes(0);
+   // ui->plot->rescaleAxes(0);
+    if (x < xAxisRange)
+    {
+         ui->plot->xAxis->setRangeLower(0);
+         ui->plot->xAxis->setRangeUpper(xAxisRange/2);
+    }
+    else
+    {
+        ui->plot->xAxis->setRangeLower(x-xAxisRange/2);
+        ui->plot->xAxis->setRangeUpper(x+xAxisRange/2);
+    }
+    ui->plot->yAxis->rescale(0);
+
+
 }
 
 void MainWindow::clearData()
@@ -253,6 +271,12 @@ void MainWindow::plot()
     ui->plot->graph(0)->setData(qv_x, qv_y);
     ui->plot->replot();
     ui->plot->update();
+}
+
+void MainWindow::changeAxisRange(int val)
+{
+    xAxisRange = val;
+
 }
 
 
