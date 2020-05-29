@@ -53,7 +53,10 @@ private slots:
     void clearTextEdit();
     void changeScrolling();
     void refreshPortList();
-    void changeAxisRange(int val);
+    void changeAxisRange_X(int val);
+    void changeLowerAxisRange_Y(int val);
+    void changeUpperAxisRange_Y(int val);
+    void changeAxisAutoRange();
 
 private:
     Ui::MainWindow * ui;
@@ -61,7 +64,10 @@ private:
     serialPortSettingsDialog * m_settings = nullptr;
     serialParsingSettingsDialog * m_parsingSettingsDialog = nullptr;
     QVector<double> qv_x, qv_y; // for plotting
-    int xAxisRange = 0;
+    int xAxisRange = 100;
+    int yAxisLower = -100;
+    int yAxisUpper = 100;
+    int yAxisRange = yAxisUpper-yAxisLower;
 
 };
 #endif // MAINWINDOW_H

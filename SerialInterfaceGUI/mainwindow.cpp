@@ -28,8 +28,17 @@ MainWindow::MainWindow(QWidget *parent)
     ui->plot->addGraph();
     ui->plot->graph(0)->setScatterStyle(QCPScatterStyle::ssNone);
     ui->plot->graph(0)->setLineStyle(QCPGraph::lsLine);
-    ui->axisRangeSpinBox->setMaximum(100000);
-    ui->axisRangeSpinBox->setMinimum(5);
+
+    ui->xAxisRangeSpinbox->setRange(0, 100000);
+    ui->xAxisRangeSpinbox->setValue(xAxisRange);
+
+    ui->yAxisLowerSpinbox->setRange(-100000, 100000);
+    ui->yAxisLowerSpinbox->setValue(yAxisLower);
+
+    ui->yAxisUpperSpinbox->setRange(-100000, 100000);
+    ui->yAxisUpperSpinbox->setValue(yAxisUpper);
+
+
 
     /* CONNECT QACTIONS */
     /* MENU */
@@ -53,8 +62,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     /* PLOT WIDGET */
     connect(ui->clearPlot, &QPushButton::clicked, this, &MainWindow::clearData);
-    connect(ui->axisRangeSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::changeAxisRange);
-    connect(ui->axisRangeSpinBox, &QSpinBox::editingFinished, ui->axisRangeSpinBox, &QSpinBox::clearFocus);
+    connect(ui->xAxisRangeSpinbox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::changeAxisRange_X);
+    connect(ui->yAxisLowerSpinbox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::changeLowerAxisRange_Y);
+    connect(ui->yAxisUpperSpinbox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::changeUpperAxisRange_Y);
+    connect(ui->xAxisRangeSpinbox, &QSpinBox::editingFinished, ui->xAxisRangeSpinbox, &QSpinBox::clearFocus);
+    connect(ui->yAxisLowerSpinbox, &QSpinBox::editingFinished, ui->yAxisLowerSpinbox, &QSpinBox::clearFocus);
+    connect(ui->yAxisUpperSpinbox, &QSpinBox::editingFinished, ui->yAxisUpperSpinbox, &QSpinBox::clearFocus);
+    connect(ui->xAxisAutoRangeCheckbox, &QCheckBox::stateChanged, this, &MainWindow::changeAxisAutoRange);
+    connect(ui->yAxisAutoRangeCheckbox, &QCheckBox::stateChanged, this, &MainWindow::changeAxisAutoRange);
 
 }
 
@@ -204,11 +219,11 @@ void MainWindow::processData()
     } // end of: switch (p.dataFormat)
 
     // INCREMENT X VALUE
-    if (x > 2000)
-    {
-        x = 0;
-        clearData();
-    }
+//    if (x > 2000)
+//    {
+//        x = 0;
+//        clearData();
+//    }
     x++;
 }
 
@@ -241,22 +256,43 @@ void MainWindow::refreshPortList()
 /* PLOTTING FUNCTIONS */
 void MainWindow::addPoint(double x, double y)
 {
+    if (qv_x.size() > 100000)
+        qv_x.clear();
+    if (qv_y.size() > 100000)
+        qv_y.clear();
+
     qv_x.append(x);
     qv_y.append(y);
-   // ui->plot->rescaleAxes(0);
-    if (x < xAxisRange)
+
+    /* X-AXIS SCALING */
+    if (ui->xAxisAutoRangeCheckbox->isChecked())
     {
-         ui->plot->xAxis->setRangeLower(0);
-         ui->plot->xAxis->setRangeUpper(xAxisRange/2);
+        ui->plot->xAxis->rescale(0);
     }
     else
     {
-        ui->plot->xAxis->setRangeLower(x-xAxisRange/2);
-        ui->plot->xAxis->setRangeUpper(x+xAxisRange/2);
+        if (x < xAxisRange)
+        {
+             ui->plot->xAxis->setRangeLower(0);
+             ui->plot->xAxis->setRangeUpper(xAxisRange);
+        }
+        else
+        {
+            ui->plot->xAxis->setRangeLower(x-xAxisRange/2);
+            ui->plot->xAxis->setRangeUpper(x+xAxisRange/2);
+        }
     }
-    ui->plot->yAxis->rescale(0);
 
-
+    /* Y-AXIS SCALING */
+    if (ui->yAxisAutoRangeCheckbox->isChecked())
+    {
+        ui->plot->yAxis->rescale(0);
+    }
+    else
+    {
+        ui->plot->yAxis->setRangeLower(yAxisLower);
+        ui->plot->yAxis->setRangeUpper(yAxisUpper);
+    }
 }
 
 void MainWindow::clearData()
@@ -273,10 +309,49 @@ void MainWindow::plot()
     ui->plot->update();
 }
 
-void MainWindow::changeAxisRange(int val)
+void MainWindow::changeAxisRange_X(int val)
 {
     xAxisRange = val;
-
 }
 
 
+void MainWindow::changeLowerAxisRange_Y(int val)
+{
+    if (val >= yAxisUpper) // if the lower range is bigger than the upper range, set the lower range (and the spin box) to upper - 10
+        ui->yAxisLowerSpinbox->setValue(yAxisUpper-10);
+    else
+        yAxisLower = val;
+}
+
+void MainWindow::changeUpperAxisRange_Y(int val)
+{
+    if (val <= yAxisLower) // if the lower range is bigger than the upper range, set the lower range (and the spin box) to upper - 10
+        ui->yAxisUpperSpinbox->setValue(yAxisLower+10);
+    else
+        yAxisUpper = val;
+}
+
+void MainWindow::changeAxisAutoRange()
+{
+    if (ui->xAxisAutoRangeCheckbox->isChecked())
+    {
+        ui->xAxisRangeSpinbox->setDisabled(1);
+    }
+    else
+    {
+        ui->xAxisRangeSpinbox->setEnabled(1);
+    }
+
+    if (ui->yAxisAutoRangeCheckbox->isChecked())
+    {
+        ui->yAxisLowerSpinbox->setDisabled(1);
+        ui->yAxisUpperSpinbox->setDisabled(1);
+    }
+    else
+    {
+        ui->yAxisLowerSpinbox->setEnabled(1);
+        ui->yAxisUpperSpinbox->setEnabled(1);
+    }
+
+
+}
