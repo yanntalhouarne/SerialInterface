@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QFile>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -9,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     setWindowTitle(tr("COM Port"));
 
+    ui->m_console->setMaximumBlockCount(100);
     //m_console = new Console(ui->ConsoleWidget);
     m_serial = new QSerialPort(this);
     ui->autoscroll->setChecked(true);
@@ -16,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_settings->setDefault();
 
     m_parsingSettingsDialog = new serialParsingSettingsDialog(this);
+
+    m_loggingSettingsDialog = new LoggingSettingsDialog(this);
 
 
     /* POPULATE COMBO BOX WITH AVAILABLE COM PORTS */
@@ -42,34 +46,42 @@ MainWindow::MainWindow(QWidget *parent)
 
     /* CONNECT QACTIONS */
     /* MENU */
+    connect(ui->actionConnect,            &QAction::triggered,      this,                    &MainWindow::connectToPort);
+    connect(ui->actionRefresh,            &QAction::triggered,      this,                    &MainWindow::refreshPortList);
+    connect(ui->actionDisconnect,         &QAction::triggered,      this,                    &MainWindow::disconnectToPort);
+    connect(ui->actionClear,              &QAction::triggered,      this,                    &MainWindow::clearTextEdit);
+    connect(ui->actionConfigurePort,      &QAction::triggered,      m_settings,              &serialPortSettingsDialog::show);
+    connect(ui->actionToggle_Auto_Scroll, &QAction::triggered,      ui->autoscroll,          &QCheckBox::toggle);
 
-    connect(ui->actionConnect, &QAction::triggered, this, &MainWindow::connectToPort);
-    connect(ui->actionRefresh, &QAction::triggered, this, &MainWindow::refreshPortList);
-    connect(ui->actionDisconnect, &QAction::triggered, this, &MainWindow::disconnectToPort);
-    connect(ui->actionClear, &QAction::triggered, this, &MainWindow::clearTextEdit);
-    connect(ui->actionConfigurePort, &QAction::triggered, m_settings, &serialPortSettingsDialog::show);
-    connect(ui->actionToggle_Auto_Scroll, &QAction::triggered, ui->autoscroll, &QCheckBox::toggle);
+    /* PARSING */
+    connect(ui->actionParsing,            &QAction::triggered,      m_parsingSettingsDialog, &serialParsingSettingsDialog::show);
 
-    connect(ui->actionParsing, &QAction::triggered, m_parsingSettingsDialog, &serialParsingSettingsDialog::show);
+    /* LOGGING MENU */
+    connect(ui->actionStart_logging,      &QAction::triggered,      this,                     &MainWindow::startLogging);
+    connect(ui->actionConfigure_logging,  &QAction::triggered,      m_loggingSettingsDialog,  &LoggingSettingsDialog::show);
+    connect(ui->actionStop_logging,       &QAction::triggered,      this,                     &MainWindow::stopLogging);
 
     /* TERMINAL WIDGET */
-    connect(ui->ConnectButton, &QPushButton::clicked, this, &MainWindow::connectToPort);
-    connect(ui->DisconnectButton, &QPushButton::clicked, this, &MainWindow::disconnectToPort);
-    connect(ui->RefreshButton, &QPushButton::clicked, this, &MainWindow::refreshPortList);
-    connect(m_serial, &QSerialPort::readyRead, this, &MainWindow::processData);
-    connect(ui->autoscroll, &QCheckBox::stateChanged, this, &MainWindow::changeScrolling);
-    connect(ui->clearButton, &QPushButton::clicked, this, &MainWindow::clearTextEdit);
+    connect(ui->ConnectButton,            &QPushButton::clicked,    this, &MainWindow::connectToPort);
+    connect(ui->DisconnectButton,         &QPushButton::clicked,    this, &MainWindow::disconnectToPort);
+    connect(ui->RefreshButton,            &QPushButton::clicked,    this, &MainWindow::refreshPortList);
+    connect(m_serial,                     &QSerialPort::readyRead,  this, &MainWindow::processData);
+    connect(ui->autoscroll,               &QCheckBox::stateChanged, this, &MainWindow::changeScrolling);
+    connect(ui->clearButton,              &QPushButton::clicked,    this, &MainWindow::clearTextEdit);
 
     /* PLOT WIDGET */
-    connect(ui->clearPlot, &QPushButton::clicked, this, &MainWindow::clearData);
-    connect(ui->xAxisRangeSpinbox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::changeAxisRange_X);
-    connect(ui->yAxisLowerSpinbox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::changeLowerAxisRange_Y);
-    connect(ui->yAxisUpperSpinbox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::changeUpperAxisRange_Y);
-    connect(ui->xAxisRangeSpinbox, &QSpinBox::editingFinished, ui->xAxisRangeSpinbox, &QSpinBox::clearFocus);
-    connect(ui->yAxisLowerSpinbox, &QSpinBox::editingFinished, ui->yAxisLowerSpinbox, &QSpinBox::clearFocus);
-    connect(ui->yAxisUpperSpinbox, &QSpinBox::editingFinished, ui->yAxisUpperSpinbox, &QSpinBox::clearFocus);
-    connect(ui->xAxisAutoRangeCheckbox, &QCheckBox::stateChanged, this, &MainWindow::changeAxisAutoRange);
-    connect(ui->yAxisAutoRangeCheckbox, &QCheckBox::stateChanged, this, &MainWindow::changeAxisAutoRange);
+    connect(ui->clearPlot,                &QPushButton::clicked,                                 this,                  &MainWindow::clearData);
+    connect(ui->xAxisRangeSpinbox,static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this,                  &MainWindow::changeAxisRange_X);
+    connect(ui->yAxisLowerSpinbox,static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this,                  &MainWindow::changeLowerAxisRange_Y);
+    connect(ui->yAxisUpperSpinbox,static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this,                  &MainWindow::changeUpperAxisRange_Y);
+    connect(ui->xAxisRangeSpinbox,        &QSpinBox::editingFinished,                            ui->xAxisRangeSpinbox, &QSpinBox::clearFocus);
+    connect(ui->yAxisLowerSpinbox,        &QSpinBox::editingFinished,                            ui->yAxisLowerSpinbox, &QSpinBox::clearFocus);
+    connect(ui->yAxisUpperSpinbox,        &QSpinBox::editingFinished,                            ui->yAxisUpperSpinbox, &QSpinBox::clearFocus);
+    connect(ui->xAxisAutoRangeCheckbox,   &QCheckBox::stateChanged,                              this,                  &MainWindow::changeAxisAutoRange);
+    connect(ui->yAxisAutoRangeCheckbox,   &QCheckBox::stateChanged,                              this,                  &MainWindow::changeAxisAutoRange);
+
+
+
 
 }
 
@@ -212,6 +224,12 @@ void MainWindow::processData()
                     plot();
                 }
             }
+
+            // update logging
+            if (m_loggingSettingsDialog->isLoggingOn())
+            {
+                m_loggingSettingsDialog->appendToFile(baAscii);
+            }
         break;
         } // end of: case 1: RAW
         default:
@@ -278,8 +296,8 @@ void MainWindow::addPoint(double x, double y)
         }
         else
         {
-            ui->plot->xAxis->setRangeLower(x-xAxisRange/2);
-            ui->plot->xAxis->setRangeUpper(x+xAxisRange/2);
+            ui->plot->xAxis->setRangeLower(x-xAxisRange);
+            ui->plot->xAxis->setRangeUpper(x);
         }
     }
 
@@ -355,3 +373,14 @@ void MainWindow::changeAxisAutoRange()
 
 
 }
+
+void MainWindow::stopLogging()
+{
+    m_loggingSettingsDialog->closeFile();
+}
+
+void MainWindow::startLogging()
+{
+    m_loggingSettingsDialog->startLoggingFile();
+}
+

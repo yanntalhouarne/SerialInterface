@@ -41,6 +41,9 @@ public:
     QAction *actionConfigure;
     QAction *actionConfigurePort;
     QAction *actionParsing;
+    QAction *actionStart_logging;
+    QAction *actionStop_logging;
+    QAction *actionConfigure_logging;
     QWidget *centralwidget;
     QWidget *TerminalWidget;
     QWidget *layoutWidget;
@@ -54,20 +57,20 @@ public:
     QWidget *ConsoleWidget;
     QLabel *consoleStatusLabel;
     Console *m_console;
-    QWidget *widget;
+    QWidget *layoutWidget1;
     QHBoxLayout *horizontalLayout;
     QCheckBox *printCheckBox;
     QPushButton *clearButton;
     QCheckBox *autoscroll;
     QWidget *plotWidget;
     QCustomPlot *plot;
-    QWidget *widget1;
+    QWidget *layoutWidget2;
     QHBoxLayout *horizontalLayout_3;
     QLabel *xAxisRangeLabel;
     QCheckBox *xAxisAutoRangeCheckbox;
     QLabel *xAxisRange;
     QSpinBox *xAxisRangeSpinbox;
-    QWidget *widget2;
+    QWidget *layoutWidget3;
     QHBoxLayout *horizontalLayout_4;
     QCheckBox *plotCheckBox;
     QPushButton *clearPlot;
@@ -81,6 +84,7 @@ public:
     QMenu *menuPort;
     QMenu *menuConsole;
     QMenu *menuConfigure;
+    QMenu *menuLogs;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -107,6 +111,12 @@ public:
         actionParsing = new QAction(MainWindow);
         actionParsing->setObjectName(QString::fromUtf8("actionParsing"));
         actionParsing->setEnabled(true);
+        actionStart_logging = new QAction(MainWindow);
+        actionStart_logging->setObjectName(QString::fromUtf8("actionStart_logging"));
+        actionStop_logging = new QAction(MainWindow);
+        actionStop_logging->setObjectName(QString::fromUtf8("actionStop_logging"));
+        actionConfigure_logging = new QAction(MainWindow);
+        actionConfigure_logging->setObjectName(QString::fromUtf8("actionConfigure_logging"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         TerminalWidget = new QWidget(centralwidget);
@@ -162,24 +172,24 @@ public:
         m_console->setEnabled(true);
         m_console->setGeometry(QRect(9, 28, 531, 351));
         m_console->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        widget = new QWidget(ConsoleWidget);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(10, 380, 210, 23));
-        horizontalLayout = new QHBoxLayout(widget);
+        layoutWidget1 = new QWidget(ConsoleWidget);
+        layoutWidget1->setObjectName(QString::fromUtf8("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(10, 380, 210, 23));
+        horizontalLayout = new QHBoxLayout(layoutWidget1);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        printCheckBox = new QCheckBox(widget);
+        printCheckBox = new QCheckBox(layoutWidget1);
         printCheckBox->setObjectName(QString::fromUtf8("printCheckBox"));
 
         horizontalLayout->addWidget(printCheckBox);
 
-        clearButton = new QPushButton(widget);
+        clearButton = new QPushButton(layoutWidget1);
         clearButton->setObjectName(QString::fromUtf8("clearButton"));
         clearButton->setMaximumSize(QSize(74, 21));
 
         horizontalLayout->addWidget(clearButton);
 
-        autoscroll = new QCheckBox(widget);
+        autoscroll = new QCheckBox(layoutWidget1);
         autoscroll->setObjectName(QString::fromUtf8("autoscroll"));
 
         horizontalLayout->addWidget(autoscroll);
@@ -192,44 +202,44 @@ public:
         plot->setObjectName(QString::fromUtf8("plot"));
         plot->setGeometry(QRect(10, 0, 521, 361));
         plot->setMinimumSize(QSize(521, 311));
-        widget1 = new QWidget(plotWidget);
-        widget1->setObjectName(QString::fromUtf8("widget1"));
-        widget1->setGeometry(QRect(315, 370, 211, 25));
-        horizontalLayout_3 = new QHBoxLayout(widget1);
+        layoutWidget2 = new QWidget(plotWidget);
+        layoutWidget2->setObjectName(QString::fromUtf8("layoutWidget2"));
+        layoutWidget2->setGeometry(QRect(315, 370, 211, 25));
+        horizontalLayout_3 = new QHBoxLayout(layoutWidget2);
         horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
         horizontalLayout_3->setContentsMargins(0, 0, 0, 0);
-        xAxisRangeLabel = new QLabel(widget1);
+        xAxisRangeLabel = new QLabel(layoutWidget2);
         xAxisRangeLabel->setObjectName(QString::fromUtf8("xAxisRangeLabel"));
 
         horizontalLayout_3->addWidget(xAxisRangeLabel);
 
-        xAxisAutoRangeCheckbox = new QCheckBox(widget1);
+        xAxisAutoRangeCheckbox = new QCheckBox(layoutWidget2);
         xAxisAutoRangeCheckbox->setObjectName(QString::fromUtf8("xAxisAutoRangeCheckbox"));
 
         horizontalLayout_3->addWidget(xAxisAutoRangeCheckbox);
 
-        xAxisRange = new QLabel(widget1);
+        xAxisRange = new QLabel(layoutWidget2);
         xAxisRange->setObjectName(QString::fromUtf8("xAxisRange"));
 
         horizontalLayout_3->addWidget(xAxisRange);
 
-        xAxisRangeSpinbox = new QSpinBox(widget1);
+        xAxisRangeSpinbox = new QSpinBox(layoutWidget2);
         xAxisRangeSpinbox->setObjectName(QString::fromUtf8("xAxisRangeSpinbox"));
 
         horizontalLayout_3->addWidget(xAxisRangeSpinbox);
 
-        widget2 = new QWidget(plotWidget);
-        widget2->setObjectName(QString::fromUtf8("widget2"));
-        widget2->setGeometry(QRect(10, 370, 131, 23));
-        horizontalLayout_4 = new QHBoxLayout(widget2);
+        layoutWidget3 = new QWidget(plotWidget);
+        layoutWidget3->setObjectName(QString::fromUtf8("layoutWidget3"));
+        layoutWidget3->setGeometry(QRect(10, 370, 131, 23));
+        horizontalLayout_4 = new QHBoxLayout(layoutWidget3);
         horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
         horizontalLayout_4->setContentsMargins(0, 0, 0, 0);
-        plotCheckBox = new QCheckBox(widget2);
+        plotCheckBox = new QCheckBox(layoutWidget3);
         plotCheckBox->setObjectName(QString::fromUtf8("plotCheckBox"));
 
         horizontalLayout_4->addWidget(plotCheckBox);
 
-        clearPlot = new QPushButton(widget2);
+        clearPlot = new QPushButton(layoutWidget3);
         clearPlot->setObjectName(QString::fromUtf8("clearPlot"));
 
         horizontalLayout_4->addWidget(clearPlot);
@@ -262,6 +272,8 @@ public:
         menuConsole->setObjectName(QString::fromUtf8("menuConsole"));
         menuConfigure = new QMenu(menubar);
         menuConfigure->setObjectName(QString::fromUtf8("menuConfigure"));
+        menuLogs = new QMenu(menubar);
+        menuLogs->setObjectName(QString::fromUtf8("menuLogs"));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -270,6 +282,7 @@ public:
         menubar->addAction(menuPort->menuAction());
         menubar->addAction(menuConsole->menuAction());
         menubar->addAction(menuConfigure->menuAction());
+        menubar->addAction(menuLogs->menuAction());
         menuPort->addAction(actionConnect);
         menuPort->addAction(actionRefresh);
         menuPort->addAction(actionDisconnect);
@@ -278,6 +291,9 @@ public:
         menuConsole->addAction(actionToggle_Auto_Scroll);
         menuConsole->addAction(actionParsing);
         menuConfigure->addAction(actionConfigurePort);
+        menuLogs->addAction(actionStart_logging);
+        menuLogs->addAction(actionStop_logging);
+        menuLogs->addAction(actionConfigure_logging);
 
         retranslateUi(MainWindow);
 
@@ -298,6 +314,9 @@ public:
         actionConfigure->setText(QCoreApplication::translate("MainWindow", "Configure", nullptr));
         actionConfigurePort->setText(QCoreApplication::translate("MainWindow", "Configure", nullptr));
         actionParsing->setText(QCoreApplication::translate("MainWindow", "Parsing settings", nullptr));
+        actionStart_logging->setText(QCoreApplication::translate("MainWindow", "Start", nullptr));
+        actionStop_logging->setText(QCoreApplication::translate("MainWindow", "Stop", nullptr));
+        actionConfigure_logging->setText(QCoreApplication::translate("MainWindow", "Configure", nullptr));
         ConnectButton->setText(QCoreApplication::translate("MainWindow", "Connect", nullptr));
         RefreshButton->setText(QCoreApplication::translate("MainWindow", "Refresh", nullptr));
         DisconnectButton->setText(QCoreApplication::translate("MainWindow", "Disconnect", nullptr));
@@ -318,6 +337,7 @@ public:
         menuPort->setTitle(QCoreApplication::translate("MainWindow", "Port", nullptr));
         menuConsole->setTitle(QCoreApplication::translate("MainWindow", "Console", nullptr));
         menuConfigure->setTitle(QCoreApplication::translate("MainWindow", "Settings", nullptr));
+        menuLogs->setTitle(QCoreApplication::translate("MainWindow", "Logs", nullptr));
     } // retranslateUi
 
 };

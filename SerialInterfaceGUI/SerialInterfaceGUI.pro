@@ -23,6 +23,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     console.cpp \
+    loggingsettingsdialog.cpp \
     main.cpp \
     mainwindow.cpp \
     qcustomplot.cpp \
@@ -31,12 +32,14 @@ SOURCES += \
 
 HEADERS += \
     console.h \
+    loggingsettingsdialog.h \
     mainwindow.h \
     qcustomplot.h \
     serialparsingsettingsdialog.h \
     serialportsettings.h
 
 FORMS += \
+    loggingsettingsdialog.ui \
     mainwindow.ui \
     parsingSettingsDialog.ui \
     portSettingsDialog.ui

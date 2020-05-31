@@ -131,7 +131,7 @@
       <enum>Qt::ScrollBarAlwaysOn</enum>
      </property>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -202,7 +202,7 @@
       </size>
      </property>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>315</x>
@@ -238,7 +238,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -370,9 +370,18 @@
     </property>
     <addaction name="actionConfigurePort"/>
    </widget>
+   <widget class="QMenu" name="menuLogs">
+    <property name="title">
+     <string>Logs</string>
+    </property>
+    <addaction name="actionStart_logging"/>
+    <addaction name="actionStop_logging"/>
+    <addaction name="actionConfigure_logging"/>
+   </widget>
    <addaction name="menuPort"/>
    <addaction name="menuConsole"/>
    <addaction name="menuConfigure"/>
+   <addaction name="menuLogs"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionConnect">
@@ -416,6 +425,21 @@
    </property>
    <property name="text">
     <string>Parsing settings</string>
+   </property>
+  </action>
+  <action name="actionStart_logging">
+   <property name="text">
+    <string>Start</string>
+   </property>
+  </action>
+  <action name="actionStop_logging">
+   <property name="text">
+    <string>Stop</string>
+   </property>
+  </action>
+  <action name="actionConfigure_logging">
+   <property name="text">
+    <string>Configure</string>
    </property>
   </action>
  </widget>

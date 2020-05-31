@@ -24,6 +24,7 @@
 #include "console.h"
 #include "serialportsettings.h"
 #include "serialparsingsettingsdialog.h"
+#include "loggingsettingsdialog.h"
 
 /* THIRD PARTY */
 #include "qcustomplot.h"
@@ -57,12 +58,15 @@ private slots:
     void changeLowerAxisRange_Y(int val);
     void changeUpperAxisRange_Y(int val);
     void changeAxisAutoRange();
+    void stopLogging();
+    void startLogging();
 
 private:
     Ui::MainWindow * ui;
     QSerialPort * m_serial = nullptr;
     serialPortSettingsDialog * m_settings = nullptr;
     serialParsingSettingsDialog * m_parsingSettingsDialog = nullptr;
+    LoggingSettingsDialog * m_loggingSettingsDialog = nullptr;
     QVector<double> qv_x, qv_y; // for plotting
     int xAxisRange = 100;
     int yAxisLower = -100;
