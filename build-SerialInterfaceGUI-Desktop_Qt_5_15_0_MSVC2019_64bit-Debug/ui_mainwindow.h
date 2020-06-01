@@ -164,7 +164,7 @@ public:
         ConsoleWidget->setGeometry(QRect(20, 50, 551, 411));
         consoleStatusLabel = new QLabel(ConsoleWidget);
         consoleStatusLabel->setObjectName(QString::fromUtf8("consoleStatusLabel"));
-        consoleStatusLabel->setGeometry(QRect(9, 9, 35, 16));
+        consoleStatusLabel->setGeometry(QRect(9, 9, 531, 16));
         consoleStatusLabel->setCursor(QCursor(Qt::ArrowCursor));
         consoleStatusLabel->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
         m_console = new Console(ConsoleWidget);

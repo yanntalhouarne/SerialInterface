@@ -10,15 +10,25 @@ MainWindow::MainWindow(QWidget *parent)
 
     setWindowTitle(tr("COM Port"));
 
+// CONSOLE
     ui->m_console->setMaximumBlockCount(100);
-    //m_console = new Console(ui->ConsoleWidget);
+
+// SERIAL PORT
     m_serial = new QSerialPort(this);
-    ui->autoscroll->setChecked(true);
+
+// SETTINGS
     m_settings = new serialPortSettingsDialog(this);
     m_settings->setDefault();
 
+
+
+    // PARSING SETTINGS
     m_parsingSettingsDialog = new serialParsingSettingsDialog(this);
 
+    ui->printCheckBox->setChecked(1);
+    ui->plotCheckBox->setChecked(0);
+
+    // LOGGING SETTINGS
     m_loggingSettingsDialog = new LoggingSettingsDialog(this);
 
 
@@ -32,44 +42,46 @@ MainWindow::MainWindow(QWidget *parent)
     ui->plot->addGraph();
     ui->plot->graph(0)->setScatterStyle(QCPScatterStyle::ssNone);
     ui->plot->graph(0)->setLineStyle(QCPGraph::lsLine);
-
+    // X-AXIS RANGE SPINBOX
     ui->xAxisRangeSpinbox->setRange(0, 100000);
     ui->xAxisRangeSpinbox->setValue(xAxisRange);
-
+    // Y-AXIS RANGE SPIN BOX
     ui->yAxisLowerSpinbox->setRange(-100000, 100000);
     ui->yAxisLowerSpinbox->setValue(yAxisLower);
-
     ui->yAxisUpperSpinbox->setRange(-100000, 100000);
     ui->yAxisUpperSpinbox->setValue(yAxisUpper);
 
 
 
-    /* CONNECT QACTIONS */
-    /* MENU */
-    connect(ui->actionConnect,            &QAction::triggered,      this,                    &MainWindow::connectToPort);
-    connect(ui->actionRefresh,            &QAction::triggered,      this,                    &MainWindow::refreshPortList);
-    connect(ui->actionDisconnect,         &QAction::triggered,      this,                    &MainWindow::disconnectToPort);
-    connect(ui->actionClear,              &QAction::triggered,      this,                    &MainWindow::clearTextEdit);
-    connect(ui->actionConfigurePort,      &QAction::triggered,      m_settings,              &serialPortSettingsDialog::show);
-    connect(ui->actionToggle_Auto_Scroll, &QAction::triggered,      ui->autoscroll,          &QCheckBox::toggle);
-
-    /* PARSING */
-    connect(ui->actionParsing,            &QAction::triggered,      m_parsingSettingsDialog, &serialParsingSettingsDialog::show);
-
-    /* LOGGING MENU */
+/* TOP MENU BAR QACTIONS */
+    // PORT
+    connect(ui->actionConnect,            &QAction::triggered,      this,                     &MainWindow::connectToPort);
+    connect(ui->actionRefresh,            &QAction::triggered,      this,                     &MainWindow::refreshPortList);
+    connect(ui->actionDisconnect,         &QAction::triggered,      this,                     &MainWindow::disconnectToPort);
+    // CONSOLE
+    connect(ui->actionClear,              &QAction::triggered,      this,                     &MainWindow::clearTextEdit);
+    connect(ui->actionToggle_Auto_Scroll, &QAction::triggered,      ui->autoscroll,           &QCheckBox::toggle);
+    connect(ui->actionParsing,            &QAction::triggered,      m_parsingSettingsDialog,  &serialParsingSettingsDialog::show);
+    // SETTING
+    connect(ui->actionConfigurePort,      &QAction::triggered,      m_settings,               &serialPortSettingsDialog::show);
+    // LOG
     connect(ui->actionStart_logging,      &QAction::triggered,      this,                     &MainWindow::startLogging);
-    connect(ui->actionConfigure_logging,  &QAction::triggered,      m_loggingSettingsDialog,  &LoggingSettingsDialog::show);
     connect(ui->actionStop_logging,       &QAction::triggered,      this,                     &MainWindow::stopLogging);
+    connect(ui->actionConfigure_logging,  &QAction::triggered,      m_loggingSettingsDialog,  &LoggingSettingsDialog::show);
+    connect(ui->menuLogs,                 &QMenu::aboutToShow,      this,                     &MainWindow::checkLogEnabledFlag);
+    connect(ui->actionConfigure_logging,  &QAction::hovered,        m_loggingSettingsDialog,  &LoggingSettingsDialog::updateLoggingCheckBox);
 
-    /* TERMINAL WIDGET */
+
+/* TERMINAL WIDGET */
     connect(ui->ConnectButton,            &QPushButton::clicked,    this, &MainWindow::connectToPort);
     connect(ui->DisconnectButton,         &QPushButton::clicked,    this, &MainWindow::disconnectToPort);
     connect(ui->RefreshButton,            &QPushButton::clicked,    this, &MainWindow::refreshPortList);
     connect(m_serial,                     &QSerialPort::readyRead,  this, &MainWindow::processData);
     connect(ui->autoscroll,               &QCheckBox::stateChanged, this, &MainWindow::changeScrolling);
     connect(ui->clearButton,              &QPushButton::clicked,    this, &MainWindow::clearTextEdit);
+    ui->autoscroll->setChecked(true);
 
-    /* PLOT WIDGET */
+/* PLOT WIDGET */
     connect(ui->clearPlot,                &QPushButton::clicked,                                 this,                  &MainWindow::clearData);
     connect(ui->xAxisRangeSpinbox,static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this,                  &MainWindow::changeAxisRange_X);
     connect(ui->yAxisLowerSpinbox,static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this,                  &MainWindow::changeLowerAxisRange_Y);
@@ -79,9 +91,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->yAxisUpperSpinbox,        &QSpinBox::editingFinished,                            ui->yAxisUpperSpinbox, &QSpinBox::clearFocus);
     connect(ui->xAxisAutoRangeCheckbox,   &QCheckBox::stateChanged,                              this,                  &MainWindow::changeAxisAutoRange);
     connect(ui->yAxisAutoRangeCheckbox,   &QCheckBox::stateChanged,                              this,                  &MainWindow::changeAxisAutoRange);
-
-
-
 
 }
 
@@ -137,6 +146,7 @@ void MainWindow::processData()
 
     // trailing check variable
     char trailingChar = 0;
+    char checksum = 0;
 
     // x-y value for the plot
     static double x = 0;
@@ -167,37 +177,44 @@ void MainWindow::processData()
             {
                 case 1:
                 {
-                    if (rxData.size() >= 2)
+                    if (rxData.size() >= 3)
                     {
                        Data = ((0x000000FF)&(rxData[0]));
-                       trailingChar = rxData[1];
+                       checksum = rxData[1];
+                       trailingChar = rxData[2];
+                       if (checksum == (rxData[0] ^ trailingChar))
+                           checksum = 1;
+                        else
+                           checksum = 0;
+
                     }
                     break;
                 }
                 case 2:
                 {
-                    if (rxData.size() >= 3)
-                    {
-                       Data = ((0x000000FF)&(rxData[0])) | ((0x0000FF00)&(rxData[1]<<8));
-                       trailingChar = rxData[2];
-                    }
-                    break;
-                }
-                case 3:
-                {
                     if (rxData.size() >= 4)
                     {
-                       Data = ((0x000000FF)&(rxData[0])) | ((0x0000FF00)&(rxData[1]<<8)) | ((0x00FF0000)&(rxData[2]<<16));
+                       Data = ((0x000000FF)&(rxData[0])) | ((0x0000FF00)&(rxData[1]<<8));
+                       checksum = rxData[2];
                        trailingChar = rxData[3];
+                       if (checksum == (rxData[0] ^ rxData[1] ^ trailingChar))
+                           checksum = 1;
+                        else
+                           checksum = 0;
                     }
                     break;
                 }
                 case 4:
                 {
-                    if (rxData.size() >= 5)
+                    if (rxData.size() >= 6)
                     {
                        Data = ((0x000000FF)&(rxData[0])) | ((0x0000FF00)&(rxData[1]<<8)) | ((0x00FF0000)&(rxData[2]<<16)) | ((0xFF000000)&(rxData[3]<<24));
-                       trailingChar = rxData[4];
+                       checksum = rxData[4];
+                       trailingChar = rxData[5];
+                       if (checksum == (rxData[0] ^ rxData[1] ^ rxData[2] ^ trailingChar))
+                           checksum = 1;
+                        else
+                           checksum = 0;
                     }
                     break;
                 }
@@ -210,7 +227,7 @@ void MainWindow::processData()
             // update console
             if (ui->printCheckBox->isChecked())
             {
-                if (trailingChar == 13) // check trailing character is NL
+                if ((trailingChar == 13) && checksum) // check trailing character is NL
                     ui->m_console->putData(baAscii);
             }
 
@@ -218,7 +235,7 @@ void MainWindow::processData()
             y = Data; // convert from ASCII character to a double value
             if (ui->plotCheckBox->isChecked())
             {
-                if (trailingChar == 13) // check trailing character is NL
+                if ((trailingChar == 13) && checksum)  // check trailing character is NL
                 {
                     addPoint(x, y);
                     plot();
@@ -226,9 +243,13 @@ void MainWindow::processData()
             }
 
             // update logging
-            if (m_loggingSettingsDialog->isLoggingOn())
+            if (startedLoggingToFile)
             {
-                m_loggingSettingsDialog->appendToFile(baAscii);
+                if ((trailingChar == 13) && checksum)
+                {
+                    m_loggingSettingsDialog->appendToFile(baAscii);
+                }
+
             }
         break;
         } // end of: case 1: RAW
@@ -237,11 +258,6 @@ void MainWindow::processData()
     } // end of: switch (p.dataFormat)
 
     // INCREMENT X VALUE
-//    if (x > 2000)
-//    {
-//        x = 0;
-//        clearData();
-//    }
     x++;
 }
 
@@ -332,7 +348,6 @@ void MainWindow::changeAxisRange_X(int val)
     xAxisRange = val;
 }
 
-
 void MainWindow::changeLowerAxisRange_Y(int val)
 {
     if (val >= yAxisUpper) // if the lower range is bigger than the upper range, set the lower range (and the spin box) to upper - 10
@@ -376,11 +391,45 @@ void MainWindow::changeAxisAutoRange()
 
 void MainWindow::stopLogging()
 {
+    startedLoggingToFile = 0;
     m_loggingSettingsDialog->closeFile();
 }
 
 void MainWindow::startLogging()
 {
-    m_loggingSettingsDialog->startLoggingFile();
+    //m_loggingSettingsDialog->openFile();
+    if(m_loggingSettingsDialog->isFileOpened())
+    {
+        if(m_loggingSettingsDialog->isLoggingEnabled()) // check if enabled checkbox is checked
+        {
+            startedLoggingToFile = 1;
+            ui->actionStart_logging->setDisabled(1);
+        }
+    }
+    ui->actionStop_logging->setDisabled(0);
+}
+
+void MainWindow::checkLogEnabledFlag()
+{
+    if (m_loggingSettingsDialog->isLoggingEnabled() && m_loggingSettingsDialog->isFileOpened() && (!didLoggingStart())) // file opened, loggign enabled, logging not started
+    {
+        ui->actionStart_logging->setDisabled(0);
+        ui->actionStop_logging->setDisabled(1);
+    }
+    else if (m_loggingSettingsDialog->isLoggingEnabled() && m_loggingSettingsDialog->isFileOpened() && didLoggingStart()) // file opened, loggign enabled, logging started
+    {
+        ui->actionStart_logging->setDisabled(1);
+        ui->actionStop_logging->setDisabled(0);
+    }
+    else // file not opened and/or logging disabled
+    {
+        ui->actionStart_logging->setDisabled(1);
+        ui->actionStop_logging->setDisabled(1);
+    }
+}
+
+bool MainWindow::didLoggingStart()
+{
+    return startedLoggingToFile;
 }
 

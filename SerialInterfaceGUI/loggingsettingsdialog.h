@@ -25,21 +25,24 @@ public:
     {
         QFile loggingFile;
         QString fileName;
-        bool loggingON = 0;
+        bool loggingEnabled = 0;
+        bool fileOpened = 0;
     };
 
     loggingSettings getLoggingSettings() const; // returns a copy of pSettings
     void appendToFile(QByteArray baAscii);
-    bool isLoggingOn();
+    bool isLoggingEnabled();
     QFile & getFile();
     void closeFile();
-    void startLoggingFile();
+    bool openFile();
+    bool isFileOpened();
 
 private slots:
     void applyLoggingSettings();
     void selectFile();
-    void setLoggingFlag();
 
+public slots:
+    void updateLoggingCheckBox();
 
 private:
     Ui::LoggingSettingsDialog * ui = nullptr;

@@ -178,22 +178,27 @@ QString serialPortSettingsDialog::getCurrentName()
 {
     return m_currentSettings.name;
 }
+
 qint32 serialPortSettingsDialog::getCurrentBaudRate()
 {
     return m_currentSettings.baudRate;
 }
+
 QSerialPort::DataBits serialPortSettingsDialog::getCurrentDatabits()
 {
     return m_currentSettings.dataBits;
 }
+
 QSerialPort::Parity serialPortSettingsDialog::getCurrentParity()
 {
     return m_currentSettings.parity;
 }
+
 QSerialPort::StopBits serialPortSettingsDialog::getCurrentStopBits()
 {
     return m_currentSettings.stopBits;
 }
+
 QSerialPort::FlowControl serialPortSettingsDialog::getCurrentFLowControl()
 {
     return m_currentSettings.flowControl;

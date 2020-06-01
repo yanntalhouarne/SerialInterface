@@ -18,6 +18,7 @@
 #include <QPlainTextEdit>
 #include <QCheckBox>
 #include <QSpinBox>
+#include <QAction>
 
 
 /* MY CLASSES */
@@ -46,6 +47,7 @@ public:
     void addPoint(double x, double y);
     void clearData();
     void plot();
+    bool didLoggingStart();
 
 private slots:
     void processData();
@@ -60,6 +62,7 @@ private slots:
     void changeAxisAutoRange();
     void stopLogging();
     void startLogging();
+    void checkLogEnabledFlag();
 
 private:
     Ui::MainWindow * ui;
@@ -68,6 +71,7 @@ private:
     serialParsingSettingsDialog * m_parsingSettingsDialog = nullptr;
     LoggingSettingsDialog * m_loggingSettingsDialog = nullptr;
     QVector<double> qv_x, qv_y; // for plotting
+    bool startedLoggingToFile = 0;
     int xAxisRange = 100;
     int yAxisLower = -100;
     int yAxisUpper = 100;

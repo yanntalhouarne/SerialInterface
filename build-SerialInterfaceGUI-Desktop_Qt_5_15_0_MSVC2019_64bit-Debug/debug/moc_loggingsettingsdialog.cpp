@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_LoggingSettingsDialog_t {
     QByteArrayData data[5];
-    char stringdata0[70];
+    char stringdata0[77];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -36,11 +36,11 @@ QT_MOC_LITERAL(0, 0, 21), // "LoggingSettingsDialog"
 QT_MOC_LITERAL(1, 22, 20), // "applyLoggingSettings"
 QT_MOC_LITERAL(2, 43, 0), // ""
 QT_MOC_LITERAL(3, 44, 10), // "selectFile"
-QT_MOC_LITERAL(4, 55, 14) // "setLoggingFlag"
+QT_MOC_LITERAL(4, 55, 21) // "updateLoggingCheckBox"
 
     },
     "LoggingSettingsDialog\0applyLoggingSettings\0"
-    "\0selectFile\0setLoggingFlag"
+    "\0selectFile\0updateLoggingCheckBox"
 };
 #undef QT_MOC_LITERAL
 
@@ -60,7 +60,7 @@ static const uint qt_meta_data_LoggingSettingsDialog[] = {
  // slots: name, argc, parameters, tag, flags
        1,    0,   29,    2, 0x08 /* Private */,
        3,    0,   30,    2, 0x08 /* Private */,
-       4,    0,   31,    2, 0x08 /* Private */,
+       4,    0,   31,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void,
@@ -78,7 +78,7 @@ void LoggingSettingsDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c
         switch (_id) {
         case 0: _t->applyLoggingSettings(); break;
         case 1: _t->selectFile(); break;
-        case 2: _t->setLoggingFlag(); break;
+        case 2: _t->updateLoggingCheckBox(); break;
         default: ;
         }
     }
