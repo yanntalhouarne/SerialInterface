@@ -58,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionConnect,            &QAction::triggered,      this,                     &MainWindow::connectToPort);
     connect(ui->actionRefresh,            &QAction::triggered,      this,                     &MainWindow::refreshPortList);
     connect(ui->actionDisconnect,         &QAction::triggered,      this,                     &MainWindow::disconnectToPort);
+    ui->actionConnect->setDisabled(0);
+    ui->actionDisconnect->setDisabled(1);
     // CONSOLE
     connect(ui->actionClear,              &QAction::triggered,      this,                     &MainWindow::clearTextEdit);
     connect(ui->actionToggle_Auto_Scroll, &QAction::triggered,      ui->autoscroll,           &QCheckBox::toggle);
@@ -74,7 +76,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 /* TERMINAL WIDGET */
     connect(ui->ConnectButton,            &QPushButton::clicked,    this, &MainWindow::connectToPort);
+    ui->ConnectButton->setDisabled(1);
     connect(ui->DisconnectButton,         &QPushButton::clicked,    this, &MainWindow::disconnectToPort);
+    ui->DisconnectButton->setDisabled(1);
     connect(ui->RefreshButton,            &QPushButton::clicked,    this, &MainWindow::refreshPortList);
     connect(m_serial,                     &QSerialPort::readyRead,  this, &MainWindow::processData);
     connect(ui->autoscroll,               &QCheckBox::stateChanged, this, &MainWindow::changeScrolling);
@@ -113,6 +117,11 @@ void MainWindow::connectToPort()
     m_serial->setFlowControl(p.flowControl);
     if (!m_serial->open(QIODevice::ReadWrite))     // open the PORT, emit the error signal if failed
     {
+        connectedToPort = 0;
+        ui->ConnectButton->setDisabled(0);
+        ui->actionConnect->setDisabled(0);
+        ui->DisconnectButton->setDisabled(1);
+        ui->actionDisconnect->setDisabled(1);
         ui->consoleStatusLabel->setText(tr("Can't open %1, error code %2")
                    .arg(m_serial->portName())
                    .arg(m_serial->error()));
@@ -120,6 +129,11 @@ void MainWindow::connectToPort()
     }
     else
     {
+        connectedToPort = 1;
+        ui->ConnectButton->setDisabled(1);
+        ui->actionConnect->setDisabled(1);
+        ui->DisconnectButton->setDisabled(0);
+        ui->actionDisconnect->setDisabled(0);
         ui->consoleStatusLabel->setText(tr("Connected to %1.      (BaudRate: %2, DataBits: %3, Parity: %4, StopBits: %5, FlowCtl: %6)")
                     .arg(p.name)
                     .arg(p.stringBaudRate)
@@ -132,6 +146,11 @@ void MainWindow::connectToPort()
 
 void MainWindow::disconnectToPort()
 {
+    connectedToPort = 0;
+    ui->ConnectButton->setDisabled(0);
+    ui->actionConnect->setDisabled(0);
+    ui->DisconnectButton->setDisabled(1);
+    ui->actionDisconnect->setDisabled(1);
     m_serial->close(); // close all other ports (if no PORT is open, this function can still be called)
     ui->consoleStatusLabel->setText(tr("Not connected."));
 }
@@ -431,5 +450,10 @@ void MainWindow::checkLogEnabledFlag()
 bool MainWindow::didLoggingStart()
 {
     return startedLoggingToFile;
+}
+
+bool MainWindow::isConnected()
+{
+    return isConnected();
 }
 

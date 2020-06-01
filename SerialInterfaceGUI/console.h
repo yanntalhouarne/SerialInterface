@@ -18,7 +18,8 @@ public:
     explicit Console(QWidget *parent = nullptr);
 
     void putData(const QByteArray &data);
-      bool autoScroll = 1;
+    bool autoScroll = 1;
+
 //    void setLocalEchoEnabled(bool set);
 
 protected:

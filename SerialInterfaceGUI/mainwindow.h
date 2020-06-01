@@ -48,6 +48,7 @@ public:
     void clearData();
     void plot();
     bool didLoggingStart();
+    bool isConnected();
 
 private slots:
     void processData();
@@ -72,6 +73,7 @@ private:
     LoggingSettingsDialog * m_loggingSettingsDialog = nullptr;
     QVector<double> qv_x, qv_y; // for plotting
     bool startedLoggingToFile = 0;
+    bool connectedToPort = 0;
     int xAxisRange = 100;
     int yAxisLower = -100;
     int yAxisUpper = 100;

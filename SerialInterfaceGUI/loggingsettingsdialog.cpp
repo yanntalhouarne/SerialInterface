@@ -34,8 +34,8 @@ void LoggingSettingsDialog::applyLoggingSettings()
     {
         if (!openFile())
         {
-            QDialog FileOpeningErrDiag;
-            QLabel FileOpeningeErrLabel("Could not open file.", &FileOpeningErrDiag);
+            //QDialog FileOpeningErrDiag;
+            //QLabel FileOpeningeErrLabel("Could not open file.", &FileOpeningErrDiag);
         }
     }
 
