@@ -7,6 +7,8 @@ serialParsingSettingsDialog::serialParsingSettingsDialog(QWidget *parent)
 {
     ui->setupUi(this);
 
+    setWindowTitle("Parsing settings");
+
     // DATA FORMAT COMBO BOX INIT
     ui->dataFormatComboBox->addItem("ASCII");
     ui->dataFormatComboBox->addItem("raw");

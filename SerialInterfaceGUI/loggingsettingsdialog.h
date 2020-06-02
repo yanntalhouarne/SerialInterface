@@ -9,6 +9,8 @@
 #include <QCheckBox>
 #include <QIODevice>
 
+#include "openfilefailuredialog.h"
+
 namespace Ui {
 class LoggingSettingsDialog;
 }
@@ -47,6 +49,7 @@ public slots:
 private:
     Ui::LoggingSettingsDialog * ui = nullptr;
     loggingSettings m_loggingSettings;
+    OpenFileFailureDialog * m_openFileFailureDialog = nullptr;
 
 
 };

@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    setWindowTitle(tr("COM Port"));
+    setWindowTitle(tr("Serial Port Communicatrion Tool"));
 
 // CONSOLE
     ui->m_console->setMaximumBlockCount(100);
@@ -20,9 +20,10 @@ MainWindow::MainWindow(QWidget *parent)
     m_settings = new serialPortSettingsDialog(this);
     m_settings->setDefault();
 
+// PORT CONNECTION FAILED DIALOG
+    m_portConnFailureDialog = new PortConnFailureDialog(this);
 
-
-    // PARSING SETTINGS
+// PARSING SETTINGS
     m_parsingSettingsDialog = new serialParsingSettingsDialog(this);
 
     ui->printCheckBox->setChecked(1);
@@ -76,7 +77,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 /* TERMINAL WIDGET */
     connect(ui->ConnectButton,            &QPushButton::clicked,    this, &MainWindow::connectToPort);
-    ui->ConnectButton->setDisabled(1);
+    ui->ConnectButton->setDisabled(0);
     connect(ui->DisconnectButton,         &QPushButton::clicked,    this, &MainWindow::disconnectToPort);
     ui->DisconnectButton->setDisabled(1);
     connect(ui->RefreshButton,            &QPushButton::clicked,    this, &MainWindow::refreshPortList);
@@ -118,11 +119,18 @@ void MainWindow::connectToPort()
     if (!m_serial->open(QIODevice::ReadWrite))     // open the PORT, emit the error signal if failed
     {
         connectedToPort = 0;
+        // activate "Connect" actions/buttons
         ui->ConnectButton->setDisabled(0);
         ui->actionConnect->setDisabled(0);
+        // de-activate "Disconnect" actions/buttons
         ui->DisconnectButton->setDisabled(1);
         ui->actionDisconnect->setDisabled(1);
-        ui->consoleStatusLabel->setText(tr("Can't open %1, error code %2")
+        m_portConnFailureDialog->setTextLabel(tr("Can't open %1, error code %2")
+                   .arg(m_serial->portName())
+                   .arg(m_serial->error()));
+        m_portConnFailureDialog->show();
+
+        ui->consoleStatusLabel->setText(tr("Could not open %1, error code %2")
                    .arg(m_serial->portName())
                    .arg(m_serial->error()));
         return;

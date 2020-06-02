@@ -9,6 +9,8 @@ serialPortSettingsDialog::serialPortSettingsDialog(QWidget *parent)
 {
     ui->setupUi(this);
 
+     setWindowTitle("Serial port settings");
+
     connect(ui->ApplyButton, &QPushButton::clicked,
             this, &serialPortSettingsDialog::apply);
     connect(ui->serialPortInfoListBox, QOverload<int>::of(&QComboBox::currentIndexChanged),

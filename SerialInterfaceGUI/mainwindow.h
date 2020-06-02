@@ -26,6 +26,7 @@
 #include "serialportsettings.h"
 #include "serialparsingsettingsdialog.h"
 #include "loggingsettingsdialog.h"
+#include "portconnfailuredialog.h"
 
 /* THIRD PARTY */
 #include "qcustomplot.h"
@@ -70,6 +71,7 @@ private:
     QSerialPort * m_serial = nullptr;
     serialPortSettingsDialog * m_settings = nullptr;
     serialParsingSettingsDialog * m_parsingSettingsDialog = nullptr;
+    PortConnFailureDialog * m_portConnFailureDialog = nullptr;
     LoggingSettingsDialog * m_loggingSettingsDialog = nullptr;
     QVector<double> qv_x, qv_y; // for plotting
     bool startedLoggingToFile = 0;

@@ -26,6 +26,8 @@ SOURCES += \
     loggingsettingsdialog.cpp \
     main.cpp \
     mainwindow.cpp \
+    openfilefailuredialog.cpp \
+    portconnfailuredialog.cpp \
     qcustomplot.cpp \
     serialparsingsettingsdialog.cpp \
     serialportsettings.cpp
@@ -34,6 +36,8 @@ HEADERS += \
     console.h \
     loggingsettingsdialog.h \
     mainwindow.h \
+    openfilefailuredialog.h \
+    portconnfailuredialog.h \
     qcustomplot.h \
     serialparsingsettingsdialog.h \
     serialportsettings.h
@@ -41,8 +45,10 @@ HEADERS += \
 FORMS += \
     loggingsettingsdialog.ui \
     mainwindow.ui \
+    openfilefailuredialog.ui \
     parsingSettingsDialog.ui \
-    portSettingsDialog.ui
+    portSettingsDialog.ui \
+    portconnfailuredialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

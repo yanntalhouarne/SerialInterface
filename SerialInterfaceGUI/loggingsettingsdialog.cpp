@@ -7,11 +7,16 @@ LoggingSettingsDialog::LoggingSettingsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    setWindowTitle("Select file");
+
+    // FILE OPEN FAILED DIALOG
+    m_openFileFailureDialog = new OpenFileFailureDialog(this);
+
     ui->loggingEnabledCheckbox->setChecked(0);
 
     connect(ui->logSettingsAppplyButton, &QPushButton::clicked,    this, &LoggingSettingsDialog::applyLoggingSettings);
     connect(ui->selectFile,              &QPushButton::clicked,    this, &LoggingSettingsDialog::selectFile);
-    //connect(ui->loggingEnabledCheckbox,  &QCheckBox::stateChanged, this, &LoggingSettingsDialog::setLoggingFlag);
+    //connect(ui->loggingEnabledCheckbox,  &QCheckBox::stateChanged, this, &LoggingSettingsDialzog::setLoggingFlag);
 }
 
 LoggingSettingsDialog::~LoggingSettingsDialog()
@@ -34,12 +39,17 @@ void LoggingSettingsDialog::applyLoggingSettings()
     {
         if (!openFile())
         {
-            //QDialog FileOpeningErrDiag;
-            //QLabel FileOpeningeErrLabel("Could not open file.", &FileOpeningErrDiag);
+            m_openFileFailureDialog->show();
+        }
+        else
+        {
+
         }
     }
-
-    hide();
+    else
+    {
+        hide();
+    }
 }
 
 void LoggingSettingsDialog::appendToFile(QByteArray baAscii)
@@ -97,8 +107,14 @@ bool LoggingSettingsDialog::openFile()
     {
         m_loggingSettings.loggingFile.setFileName(m_loggingSettings.fileName);
         if(m_loggingSettings.loggingFile.open(QIODevice::ReadWrite) && (!isFileOpened()))
+        {
             m_loggingSettings.fileOpened = 1;
-        return 1;
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
     }
     else
     {
