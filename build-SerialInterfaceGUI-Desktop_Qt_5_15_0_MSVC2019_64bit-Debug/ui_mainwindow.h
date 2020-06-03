@@ -51,9 +51,9 @@ public:
     QGridLayout *gridLayout;
     QVBoxLayout *verticalLayout;
     QPushButton *ConnectButton;
-    QPushButton *RefreshButton;
     QComboBox *term_comboBox;
     QPushButton *DisconnectButton;
+    QPushButton *RefreshButton;
     QLabel *term_comboBoxLabel;
     QWidget *ConsoleWidget;
     Console *m_console;
@@ -131,7 +131,7 @@ public:
         TerminalWidget->setAutoFillBackground(false);
         layoutWidget = new QWidget(TerminalWidget);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(0, 10, 541, 44));
+        layoutWidget->setGeometry(QRect(0, 10, 531, 44));
         gridLayout = new QGridLayout(layoutWidget);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
@@ -145,11 +145,6 @@ public:
 
         gridLayout->addLayout(verticalLayout, 0, 3, 1, 1);
 
-        RefreshButton = new QPushButton(layoutWidget);
-        RefreshButton->setObjectName(QString::fromUtf8("RefreshButton"));
-
-        gridLayout->addWidget(RefreshButton, 0, 5, 1, 1);
-
         term_comboBox = new QComboBox(layoutWidget);
         term_comboBox->setObjectName(QString::fromUtf8("term_comboBox"));
 
@@ -160,8 +155,17 @@ public:
 
         gridLayout->addWidget(DisconnectButton, 0, 4, 1, 1);
 
+        RefreshButton = new QPushButton(layoutWidget);
+        RefreshButton->setObjectName(QString::fromUtf8("RefreshButton"));
+
+        gridLayout->addWidget(RefreshButton, 0, 5, 1, 1);
+
         term_comboBoxLabel = new QLabel(layoutWidget);
         term_comboBoxLabel->setObjectName(QString::fromUtf8("term_comboBoxLabel"));
+        QFont font;
+        font.setBold(true);
+        font.setWeight(75);
+        term_comboBoxLabel->setFont(font);
 
         gridLayout->addWidget(term_comboBoxLabel, 0, 0, 1, 1);
 
@@ -171,7 +175,7 @@ public:
         m_console = new Console(ConsoleWidget);
         m_console->setObjectName(QString::fromUtf8("m_console"));
         m_console->setEnabled(true);
-        m_console->setGeometry(QRect(9, 8, 541, 371));
+        m_console->setGeometry(QRect(0, 0, 541, 361));
         m_console->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         layoutWidget1 = new QWidget(ConsoleWidget);
         layoutWidget1->setObjectName(QString::fromUtf8("layoutWidget1"));
@@ -265,7 +269,10 @@ public:
         yAxisUpperSpinbox->setGeometry(QRect(1030, 30, 71, 23));
         consoleStatusLabel = new QLabel(centralwidget);
         consoleStatusLabel->setObjectName(QString::fromUtf8("consoleStatusLabel"));
-        consoleStatusLabel->setGeometry(QRect(20, 10, 521, 20));
+        consoleStatusLabel->setGeometry(QRect(20, 10, 521, 16));
+        QFont font1;
+        font1.setItalic(true);
+        consoleStatusLabel->setFont(font1);
         consoleStatusLabel->setCursor(QCursor(Qt::ArrowCursor));
         consoleStatusLabel->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
         txConsoleTextEdit = new QTextEdit(centralwidget);
@@ -339,9 +346,9 @@ public:
         actionStop_logging->setText(QCoreApplication::translate("MainWindow", "Stop", nullptr));
         actionConfigure_logging->setText(QCoreApplication::translate("MainWindow", "Configure", nullptr));
         ConnectButton->setText(QCoreApplication::translate("MainWindow", "Connect", nullptr));
-        RefreshButton->setText(QCoreApplication::translate("MainWindow", "Refresh", nullptr));
         DisconnectButton->setText(QCoreApplication::translate("MainWindow", "Disconnect", nullptr));
-        term_comboBoxLabel->setText(QCoreApplication::translate("MainWindow", "Available ports:", nullptr));
+        RefreshButton->setText(QCoreApplication::translate("MainWindow", "Refresh", nullptr));
+        term_comboBoxLabel->setText(QCoreApplication::translate("MainWindow", "       Available ports:", nullptr));
         printCheckBox->setText(QCoreApplication::translate("MainWindow", "Print", nullptr));
         clearButton->setText(QCoreApplication::translate("MainWindow", "Clear", nullptr));
         autoscroll->setText(QCoreApplication::translate("MainWindow", "auto-scroll", nullptr));

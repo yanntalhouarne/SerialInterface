@@ -85,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->autoscroll,               &QCheckBox::stateChanged, this, &MainWindow::changeScrolling);
     connect(ui->clearButton,              &QPushButton::clicked,    this, &MainWindow::clearTextEdit);
     ui->autoscroll->setChecked(true);
+    ui->consoleStatusLabel->setText("Not connected.");
 
 /* TX CONSOLE */
     connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::sendToPort);

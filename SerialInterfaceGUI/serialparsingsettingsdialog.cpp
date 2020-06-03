@@ -20,7 +20,7 @@ serialParsingSettingsDialog::serialParsingSettingsDialog(QWidget *parent)
     ui->nbrBytesComboBox->addItem("2");
     ui->nbrBytesComboBox->addItem("4");
     ui->nbrBytesComboBox->setCurrentIndex(1);
-    //ui->nbrBytesComboBox->setDisabled(1);
+    ui->nbrBytesComboBox->setDisabled(1);
 
     applyParsingSettings();
 
