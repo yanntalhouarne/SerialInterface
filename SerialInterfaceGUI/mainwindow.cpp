@@ -476,22 +476,66 @@ bool MainWindow::isConnected()
 
 void MainWindow::sendToPort()
 {
+
+    // get the parsing settings
+    const serialParsingSettingsDialog::parsingSettings p = m_parsingSettingsDialog->getParsingSettings();
+
+    // get string from TX text edit box
     QString stringToSend = ui->txConsoleTextEdit->toPlainText();
-
     QByteArray bArray = stringToSend.toLocal8Bit();
+    //QByteArray hexArray = stringToSend.fromLocal8Bit();
 
-    if (ui->crCheckBox->isChecked())
+    switch (p.dataFormat)
     {
-        bArray.append(13);
-    }
-    if (ui->lfCheckBox->isChecked())
-    {
-        bArray.append(10);
-    }
+        case 0 : // send as ASCII
+        {
 
-    if (connectedToPort) // make sure we are connected to the PORT
-    {
-        m_serial->write(bArray);
-    }
+            if (ui->crCheckBox->isChecked())
+            {
+                bArray.append(13);
+            }
+            if (ui->lfCheckBox->isChecked())
+            {
+                bArray.append(10);
+            }
 
+            if (connectedToPort) // make sure we are connected to the PORT
+            {
+                m_serial->write(bArray);
+            }
+            break;
+        }
+        case 1: // raw
+        {
+            QByteArray txBuffer;
+            int nbrBytes = 0;
+            int i = 0;
+            QString tempChar;
+            while (bArray.size() > i+4)
+            {
+                if ((bArray[i] == '0')&&(bArray[i+1] == 'x'))
+                {
+                    nbrBytes++;
+                    tempChar.append((QChar)bArray[i+2]);
+                    tempChar.append((QChar)bArray[i+3]);
+                    bool ok;
+                    int hex = tempChar.toInt(&ok, 16);
+                    tempChar.clear();
+                    txBuffer.append(hex);
+                }
+                if (bArray[i+4] == ',')
+                {
+                    i+=5;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            m_serial->write(txBuffer);
+            break;
+        }
+        default:
+            break;
+    } // end of: switch (p.dataFormat)
 }
