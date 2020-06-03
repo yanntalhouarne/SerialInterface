@@ -86,6 +86,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->clearButton,              &QPushButton::clicked,    this, &MainWindow::clearTextEdit);
     ui->autoscroll->setChecked(true);
 
+/* TX CONSOLE */
+    connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::sendToPort);
+    ui->sendButton->setDisabled(1);
+    ui->lfCheckBox->setChecked(1);
+    ui->crCheckBox->setChecked(0);
+
 /* PLOT WIDGET */
     connect(ui->clearPlot,                &QPushButton::clicked,                                 this,                  &MainWindow::clearData);
     connect(ui->xAxisRangeSpinbox,static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this,                  &MainWindow::changeAxisRange_X);
@@ -149,6 +155,7 @@ void MainWindow::connectToPort()
                     .arg(p.stringParity)
                     .arg(p.stringStopBits)
                     .arg(p.stringFlowControl));
+        ui->sendButton->setDisabled(0);
     }
 }
 
@@ -159,6 +166,7 @@ void MainWindow::disconnectToPort()
     ui->actionConnect->setDisabled(0);
     ui->DisconnectButton->setDisabled(1);
     ui->actionDisconnect->setDisabled(1);
+    ui->sendButton->setDisabled(1);
     m_serial->close(); // close all other ports (if no PORT is open, this function can still be called)
     ui->consoleStatusLabel->setText(tr("Not connected."));
 }
@@ -462,6 +470,27 @@ bool MainWindow::didLoggingStart()
 
 bool MainWindow::isConnected()
 {
-    return isConnected();
+    return connectedToPort;
 }
 
+void MainWindow::sendToPort()
+{
+    QString stringToSend = ui->txConsoleTextEdit->toPlainText();
+
+    QByteArray bArray = stringToSend.toLocal8Bit();
+
+    if (ui->crCheckBox->isChecked())
+    {
+        bArray.append(13);
+    }
+    if (ui->lfCheckBox->isChecked())
+    {
+        bArray.append(10);
+    }
+
+    if (connectedToPort) // make sure we are connected to the PORT
+    {
+        m_serial->write(bArray);
+    }
+
+}

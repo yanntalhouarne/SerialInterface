@@ -65,6 +65,7 @@ private slots:
     void stopLogging();
     void startLogging();
     void checkLogEnabledFlag();
+    void sendToPort();
 
 private:
     Ui::MainWindow * ui;

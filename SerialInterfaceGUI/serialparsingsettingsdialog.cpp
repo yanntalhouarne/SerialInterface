@@ -12,7 +12,7 @@ serialParsingSettingsDialog::serialParsingSettingsDialog(QWidget *parent)
     // DATA FORMAT COMBO BOX INIT
     ui->dataFormatComboBox->addItem("ASCII");
     ui->dataFormatComboBox->addItem("raw");
-    ui->dataFormatComboBox->setCurrentIndex(1);
+    ui->dataFormatComboBox->setCurrentIndex(0);
 
 
     // NUMBER OF BYTES COMBO BOX INIT
