@@ -5,6 +5,9 @@
 #include <QWidget>
 #include <QDialog>
 #include <QPushButton>
+#define ASCII 0
+#define RAW 1
+#define STM32_BOOTLOADER_MODE 2
 
 QT_BEGIN_NAMESPACE
 
@@ -22,16 +25,23 @@ public:
 public:
     struct parsingSettings
     {
-        enum dataFormatEnum { ascii, raw};
+        enum dataFormatEnum {ascii, raw};
         unsigned int dataFormat;
         unsigned int byteNbr;
     };
 
     parsingSettings getParsingSettings() const; // returns a copy of pSettings
+    unsigned int getDataFormat();
+
+    //void setDataFormatSpinBox(int parsingSettings);
 
 private slots:
     void applyParsingSettings();
     void showByteNbr(int idx);
+
+public slots:
+    void setParsingSettings(int parsingSetting);
+
 
 private:
     Ui::parsingSettingsDialog * ui = nullptr;

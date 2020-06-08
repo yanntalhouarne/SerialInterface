@@ -45,15 +45,16 @@ public:
     QAction *actionStart_logging;
     QAction *actionStop_logging;
     QAction *actionConfigure_logging;
+    QAction *actionBootloaderConfigure;
     QWidget *centralwidget;
     QWidget *TerminalWidget;
     QWidget *layoutWidget;
     QGridLayout *gridLayout;
+    QPushButton *DisconnectButton;
     QVBoxLayout *verticalLayout;
     QPushButton *ConnectButton;
-    QComboBox *term_comboBox;
-    QPushButton *DisconnectButton;
     QPushButton *RefreshButton;
+    QComboBox *term_comboBox;
     QLabel *term_comboBoxLabel;
     QWidget *ConsoleWidget;
     Console *m_console;
@@ -86,11 +87,13 @@ public:
     QPushButton *sendButton;
     QCheckBox *crCheckBox;
     QCheckBox *lfCheckBox;
+    QCheckBox *asciiFormatCheckbox;
     QMenuBar *menubar;
     QMenu *menuPort;
     QMenu *menuConsole;
     QMenu *menuConfigure;
     QMenu *menuLogs;
+    QMenu *menuSTM32_Bootloader;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -123,18 +126,25 @@ public:
         actionStop_logging->setObjectName(QString::fromUtf8("actionStop_logging"));
         actionConfigure_logging = new QAction(MainWindow);
         actionConfigure_logging->setObjectName(QString::fromUtf8("actionConfigure_logging"));
+        actionBootloaderConfigure = new QAction(MainWindow);
+        actionBootloaderConfigure->setObjectName(QString::fromUtf8("actionBootloaderConfigure"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         TerminalWidget = new QWidget(centralwidget);
         TerminalWidget->setObjectName(QString::fromUtf8("TerminalWidget"));
-        TerminalWidget->setGeometry(QRect(20, 20, 541, 61));
+        TerminalWidget->setGeometry(QRect(30, 20, 541, 61));
         TerminalWidget->setAutoFillBackground(false);
         layoutWidget = new QWidget(TerminalWidget);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(0, 10, 531, 44));
+        layoutWidget->setGeometry(QRect(0, 10, 541, 44));
         gridLayout = new QGridLayout(layoutWidget);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
+        DisconnectButton = new QPushButton(layoutWidget);
+        DisconnectButton->setObjectName(QString::fromUtf8("DisconnectButton"));
+
+        gridLayout->addWidget(DisconnectButton, 0, 4, 1, 1);
+
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         ConnectButton = new QPushButton(layoutWidget);
@@ -145,20 +155,15 @@ public:
 
         gridLayout->addLayout(verticalLayout, 0, 3, 1, 1);
 
-        term_comboBox = new QComboBox(layoutWidget);
-        term_comboBox->setObjectName(QString::fromUtf8("term_comboBox"));
-
-        gridLayout->addWidget(term_comboBox, 0, 2, 1, 1, Qt::AlignTop);
-
-        DisconnectButton = new QPushButton(layoutWidget);
-        DisconnectButton->setObjectName(QString::fromUtf8("DisconnectButton"));
-
-        gridLayout->addWidget(DisconnectButton, 0, 4, 1, 1);
-
         RefreshButton = new QPushButton(layoutWidget);
         RefreshButton->setObjectName(QString::fromUtf8("RefreshButton"));
 
         gridLayout->addWidget(RefreshButton, 0, 5, 1, 1);
+
+        term_comboBox = new QComboBox(layoutWidget);
+        term_comboBox->setObjectName(QString::fromUtf8("term_comboBox"));
+
+        gridLayout->addWidget(term_comboBox, 0, 2, 1, 1, Qt::AlignTop);
 
         term_comboBoxLabel = new QLabel(layoutWidget);
         term_comboBoxLabel->setObjectName(QString::fromUtf8("term_comboBoxLabel"));
@@ -171,11 +176,11 @@ public:
 
         ConsoleWidget = new QWidget(centralwidget);
         ConsoleWidget->setObjectName(QString::fromUtf8("ConsoleWidget"));
-        ConsoleWidget->setGeometry(QRect(10, 130, 551, 411));
+        ConsoleWidget->setGeometry(QRect(20, 130, 551, 411));
         m_console = new Console(ConsoleWidget);
         m_console->setObjectName(QString::fromUtf8("m_console"));
         m_console->setEnabled(true);
-        m_console->setGeometry(QRect(0, 0, 541, 361));
+        m_console->setGeometry(QRect(0, 0, 551, 361));
         m_console->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         layoutWidget1 = new QWidget(ConsoleWidget);
         layoutWidget1->setObjectName(QString::fromUtf8("layoutWidget1"));
@@ -201,7 +206,7 @@ public:
 
         plotWidget = new QWidget(centralwidget);
         plotWidget->setObjectName(QString::fromUtf8("plotWidget"));
-        plotWidget->setGeometry(QRect(570, 70, 731, 481));
+        plotWidget->setGeometry(QRect(580, 70, 731, 481));
         plotWidget->setMinimumSize(QSize(731, 401));
         plot = new QCustomPlot(plotWidget);
         plot->setObjectName(QString::fromUtf8("plot"));
@@ -251,25 +256,25 @@ public:
 
         yAxisRangeLabel = new QLabel(centralwidget);
         yAxisRangeLabel->setObjectName(QString::fromUtf8("yAxisRangeLabel"));
-        yAxisRangeLabel->setGeometry(QRect(830, 30, 64, 16));
+        yAxisRangeLabel->setGeometry(QRect(840, 40, 64, 16));
         yAxisAutoRangeCheckbox = new QCheckBox(centralwidget);
         yAxisAutoRangeCheckbox->setObjectName(QString::fromUtf8("yAxisAutoRangeCheckbox"));
-        yAxisAutoRangeCheckbox->setGeometry(QRect(900, 30, 47, 19));
+        yAxisAutoRangeCheckbox->setGeometry(QRect(910, 40, 47, 19));
         yAxisLowerLabel = new QLabel(centralwidget);
         yAxisLowerLabel->setObjectName(QString::fromUtf8("yAxisLowerLabel"));
-        yAxisLowerLabel->setGeometry(QRect(970, 10, 26, 16));
+        yAxisLowerLabel->setGeometry(QRect(980, 20, 26, 16));
         yAxisLowerSpinbox = new QSpinBox(centralwidget);
         yAxisLowerSpinbox->setObjectName(QString::fromUtf8("yAxisLowerSpinbox"));
-        yAxisLowerSpinbox->setGeometry(QRect(950, 30, 71, 23));
+        yAxisLowerSpinbox->setGeometry(QRect(960, 40, 71, 23));
         yAxisUpperLabel = new QLabel(centralwidget);
         yAxisUpperLabel->setObjectName(QString::fromUtf8("yAxisUpperLabel"));
-        yAxisUpperLabel->setGeometry(QRect(1050, 10, 28, 16));
+        yAxisUpperLabel->setGeometry(QRect(1060, 20, 28, 16));
         yAxisUpperSpinbox = new QSpinBox(centralwidget);
         yAxisUpperSpinbox->setObjectName(QString::fromUtf8("yAxisUpperSpinbox"));
-        yAxisUpperSpinbox->setGeometry(QRect(1030, 30, 71, 23));
+        yAxisUpperSpinbox->setGeometry(QRect(1040, 40, 71, 23));
         consoleStatusLabel = new QLabel(centralwidget);
         consoleStatusLabel->setObjectName(QString::fromUtf8("consoleStatusLabel"));
-        consoleStatusLabel->setGeometry(QRect(20, 10, 521, 16));
+        consoleStatusLabel->setGeometry(QRect(30, 10, 521, 16));
         QFont font1;
         font1.setItalic(true);
         consoleStatusLabel->setFont(font1);
@@ -277,19 +282,22 @@ public:
         consoleStatusLabel->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
         txConsoleTextEdit = new QTextEdit(centralwidget);
         txConsoleTextEdit->setObjectName(QString::fromUtf8("txConsoleTextEdit"));
-        txConsoleTextEdit->setGeometry(QRect(40, 90, 421, 31));
+        txConsoleTextEdit->setGeometry(QRect(50, 90, 421, 31));
         txLabel = new QLabel(centralwidget);
         txLabel->setObjectName(QString::fromUtf8("txLabel"));
-        txLabel->setGeometry(QRect(20, 90, 21, 16));
+        txLabel->setGeometry(QRect(30, 90, 21, 16));
         sendButton = new QPushButton(centralwidget);
         sendButton->setObjectName(QString::fromUtf8("sendButton"));
-        sendButton->setGeometry(QRect(510, 90, 41, 21));
+        sendButton->setGeometry(QRect(520, 90, 51, 21));
         crCheckBox = new QCheckBox(centralwidget);
         crCheckBox->setObjectName(QString::fromUtf8("crCheckBox"));
-        crCheckBox->setGeometry(QRect(470, 90, 41, 19));
+        crCheckBox->setGeometry(QRect(480, 90, 41, 19));
         lfCheckBox = new QCheckBox(centralwidget);
         lfCheckBox->setObjectName(QString::fromUtf8("lfCheckBox"));
-        lfCheckBox->setGeometry(QRect(470, 110, 41, 20));
+        lfCheckBox->setGeometry(QRect(480, 110, 41, 20));
+        asciiFormatCheckbox = new QCheckBox(centralwidget);
+        asciiFormatCheckbox->setObjectName(QString::fromUtf8("asciiFormatCheckbox"));
+        asciiFormatCheckbox->setGeometry(QRect(520, 110, 51, 21));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -302,6 +310,8 @@ public:
         menuConfigure->setObjectName(QString::fromUtf8("menuConfigure"));
         menuLogs = new QMenu(menubar);
         menuLogs->setObjectName(QString::fromUtf8("menuLogs"));
+        menuSTM32_Bootloader = new QMenu(menubar);
+        menuSTM32_Bootloader->setObjectName(QString::fromUtf8("menuSTM32_Bootloader"));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -311,6 +321,7 @@ public:
         menubar->addAction(menuConsole->menuAction());
         menubar->addAction(menuConfigure->menuAction());
         menubar->addAction(menuLogs->menuAction());
+        menubar->addAction(menuSTM32_Bootloader->menuAction());
         menuPort->addAction(actionConnect);
         menuPort->addAction(actionRefresh);
         menuPort->addAction(actionDisconnect);
@@ -322,6 +333,7 @@ public:
         menuLogs->addAction(actionStart_logging);
         menuLogs->addAction(actionStop_logging);
         menuLogs->addAction(actionConfigure_logging);
+        menuSTM32_Bootloader->addAction(actionBootloaderConfigure);
 
         retranslateUi(MainWindow);
 
@@ -345,10 +357,11 @@ public:
         actionStart_logging->setText(QCoreApplication::translate("MainWindow", "Start", nullptr));
         actionStop_logging->setText(QCoreApplication::translate("MainWindow", "Stop", nullptr));
         actionConfigure_logging->setText(QCoreApplication::translate("MainWindow", "Configure", nullptr));
-        ConnectButton->setText(QCoreApplication::translate("MainWindow", "Connect", nullptr));
+        actionBootloaderConfigure->setText(QCoreApplication::translate("MainWindow", "Configure", nullptr));
         DisconnectButton->setText(QCoreApplication::translate("MainWindow", "Disconnect", nullptr));
+        ConnectButton->setText(QCoreApplication::translate("MainWindow", "Connect", nullptr));
         RefreshButton->setText(QCoreApplication::translate("MainWindow", "Refresh", nullptr));
-        term_comboBoxLabel->setText(QCoreApplication::translate("MainWindow", "       Available ports:", nullptr));
+        term_comboBoxLabel->setText(QCoreApplication::translate("MainWindow", "Available ports:", nullptr));
         printCheckBox->setText(QCoreApplication::translate("MainWindow", "Print", nullptr));
         clearButton->setText(QCoreApplication::translate("MainWindow", "Clear", nullptr));
         autoscroll->setText(QCoreApplication::translate("MainWindow", "auto-scroll", nullptr));
@@ -366,10 +379,12 @@ public:
         sendButton->setText(QCoreApplication::translate("MainWindow", "Send", nullptr));
         crCheckBox->setText(QCoreApplication::translate("MainWindow", "CR", nullptr));
         lfCheckBox->setText(QCoreApplication::translate("MainWindow", "LF", nullptr));
+        asciiFormatCheckbox->setText(QCoreApplication::translate("MainWindow", "ASCII", nullptr));
         menuPort->setTitle(QCoreApplication::translate("MainWindow", "Port", nullptr));
         menuConsole->setTitle(QCoreApplication::translate("MainWindow", "Console", nullptr));
         menuConfigure->setTitle(QCoreApplication::translate("MainWindow", "Settings", nullptr));
         menuLogs->setTitle(QCoreApplication::translate("MainWindow", "Logs", nullptr));
+        menuSTM32_Bootloader->setTitle(QCoreApplication::translate("MainWindow", "STM32 Bootloader", nullptr));
     } // retranslateUi
 
 };

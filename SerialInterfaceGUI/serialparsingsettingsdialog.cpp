@@ -12,6 +12,7 @@ serialParsingSettingsDialog::serialParsingSettingsDialog(QWidget *parent)
     // DATA FORMAT COMBO BOX INIT
     ui->dataFormatComboBox->addItem("ASCII");
     ui->dataFormatComboBox->addItem("raw");
+    ui->dataFormatComboBox->addItem("STM32 bootloader");
     ui->dataFormatComboBox->setCurrentIndex(0);
 
 
@@ -48,7 +49,7 @@ void serialParsingSettingsDialog::showByteNbr(int idx)
     {
         ui->nbrBytesComboBox->setEnabled(1);
     }
-    else // ASCII
+    else // ASCII or STM32_BOOTLOADER_MODE
     {
         ui->nbrBytesComboBox->setCurrentIndex(0);
         ui->nbrBytesComboBox->setDisabled(1);
@@ -60,4 +61,46 @@ serialParsingSettingsDialog::parsingSettings serialParsingSettingsDialog::getPar
 {
     return m_parsingSettings;
 }
+
+unsigned int serialParsingSettingsDialog::getDataFormat()
+{
+    return m_parsingSettings.dataFormat;
+}
+
+void serialParsingSettingsDialog::setParsingSettings(int parsingSetting)
+{
+    switch (parsingSetting)
+    {
+        case ASCII:
+        {
+            m_parsingSettings.dataFormat = ASCII;
+            ui->dataFormatComboBox->setCurrentIndex(ASCII);
+            break;
+        }
+        case RAW:
+        {
+            m_parsingSettings.dataFormat = RAW;
+            ui->dataFormatComboBox->setCurrentIndex(RAW);
+            break;
+        }
+        case STM32_BOOTLOADER_MODE:
+        {
+            m_parsingSettings.dataFormat = STM32_BOOTLOADER_MODE;
+            ui->dataFormatComboBox->setCurrentIndex(STM32_BOOTLOADER_MODE);
+            break;
+        }
+    } // end of: switch (parsingSettings)
+}
+
+//void serialParsingSettingsDialog::setDataFormatSpinBox(int parsingSettings)
+//{
+//   if (parsingSettings == ASCII)
+//   {
+//        ui->dataFormatComboBox->setCurrentIndex(ASCII);
+//   }
+//   else if (parsingSettings == RAW)
+//   {
+//        ui->dataFormatComboBox->setCurrentIndex(RAW);
+//   }
+//}
 

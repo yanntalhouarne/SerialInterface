@@ -27,6 +27,8 @@
 #include "serialparsingsettingsdialog.h"
 #include "loggingsettingsdialog.h"
 #include "portconnfailuredialog.h"
+#include "stm32interpreter.h"
+#include "stm32bootloaderdialog.h"
 
 /* THIRD PARTY */
 #include "qcustomplot.h"
@@ -66,6 +68,7 @@ private slots:
     void startLogging();
     void checkLogEnabledFlag();
     void sendToPort();
+    void updateParsingSettings();
 
 private:
     Ui::MainWindow * ui;
@@ -74,6 +77,7 @@ private:
     serialParsingSettingsDialog * m_parsingSettingsDialog = nullptr;
     PortConnFailureDialog * m_portConnFailureDialog = nullptr;
     LoggingSettingsDialog * m_loggingSettingsDialog = nullptr;
+    stm32bootloaderDialog * m_stm32bootloaderDialog = nullptr;
     QVector<double> qv_x, qv_y; // for plotting
     bool startedLoggingToFile = 0;
     bool connectedToPort = 0;
@@ -81,6 +85,7 @@ private:
     int yAxisLower = -100;
     int yAxisUpper = 100;
     int yAxisRange = yAxisUpper-yAxisLower;
+    stm32Interpreter m_stm32Interpreter;
 
 };
 #endif // MAINWINDOW_H

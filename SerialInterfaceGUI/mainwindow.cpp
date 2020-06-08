@@ -38,6 +38,9 @@ MainWindow::MainWindow(QWidget *parent)
     for (const QSerialPortInfo &info : infos)
         ui->term_comboBox->addItem(info.portName());
 
+    /* STM32 BOOTLOADER DIALOG */
+    m_stm32bootloaderDialog = new stm32bootloaderDialog(this);
+
 
     /* Set up plot */
     ui->plot->addGraph();
@@ -51,6 +54,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->yAxisLowerSpinbox->setValue(yAxisLower);
     ui->yAxisUpperSpinbox->setRange(-100000, 100000);
     ui->yAxisUpperSpinbox->setValue(yAxisUpper);
+
+    ui->asciiFormatCheckbox->setChecked(1);
 
 
 
@@ -73,17 +78,18 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionConfigure_logging,  &QAction::triggered,      m_loggingSettingsDialog,  &LoggingSettingsDialog::show);
     connect(ui->menuLogs,                 &QMenu::aboutToShow,      this,                     &MainWindow::checkLogEnabledFlag);
     connect(ui->actionConfigure_logging,  &QAction::hovered,        m_loggingSettingsDialog,  &LoggingSettingsDialog::updateLoggingCheckBox);
-
+    // STM32 BOOTLOADER
+    connect(ui->actionBootloaderConfigure,  &QAction::triggered,    m_stm32bootloaderDialog,  &stm32bootloaderDialog::show);
 
 /* TERMINAL WIDGET */
-    connect(ui->ConnectButton,            &QPushButton::clicked,    this, &MainWindow::connectToPort);
+    connect(ui->ConnectButton,            &QPushButton::clicked,    this,                     &MainWindow::connectToPort);
     ui->ConnectButton->setDisabled(0);
-    connect(ui->DisconnectButton,         &QPushButton::clicked,    this, &MainWindow::disconnectToPort);
+    connect(ui->DisconnectButton,         &QPushButton::clicked,    this,                     &MainWindow::disconnectToPort);
     ui->DisconnectButton->setDisabled(1);
-    connect(ui->RefreshButton,            &QPushButton::clicked,    this, &MainWindow::refreshPortList);
-    connect(m_serial,                     &QSerialPort::readyRead,  this, &MainWindow::processData);
-    connect(ui->autoscroll,               &QCheckBox::stateChanged, this, &MainWindow::changeScrolling);
-    connect(ui->clearButton,              &QPushButton::clicked,    this, &MainWindow::clearTextEdit);
+    connect(ui->RefreshButton,            &QPushButton::clicked,    this,                     &MainWindow::refreshPortList);
+    connect(m_serial,                     &QSerialPort::readyRead,  this,                     &MainWindow::processData);
+    connect(ui->autoscroll,               &QCheckBox::stateChanged, this,                     &MainWindow::changeScrolling);
+    connect(ui->clearButton,              &QPushButton::clicked,    this,                     &MainWindow::clearTextEdit);
     ui->autoscroll->setChecked(true);
     ui->consoleStatusLabel->setText("Not connected.");
 
@@ -92,6 +98,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->sendButton->setDisabled(1);
     ui->lfCheckBox->setChecked(1);
     ui->crCheckBox->setChecked(0);
+    connect(ui->asciiFormatCheckbox, &QCheckBox::stateChanged, this, &MainWindow::updateParsingSettings);
+
 
 /* PLOT WIDGET */
     connect(ui->clearPlot,                &QPushButton::clicked,                                 this,                  &MainWindow::clearData);
@@ -157,6 +165,15 @@ void MainWindow::connectToPort()
                     .arg(p.stringStopBits)
                     .arg(p.stringFlowControl));
         ui->sendButton->setDisabled(0);
+        auto m = m_parsingSettingsDialog->getParsingSettings();
+        if (m.dataFormat == ASCII)
+        {
+            ui->asciiFormatCheckbox->setChecked(1);
+        }
+        else
+        {
+            ui->asciiFormatCheckbox->setChecked(0);
+        }
     }
 }
 
@@ -191,7 +208,7 @@ void MainWindow::processData()
     // update console
     switch (p.dataFormat)
     {
-        case 0: // ASCII
+        case ASCII:
         {
             if (ui->printCheckBox->isChecked())
             {
@@ -205,8 +222,8 @@ void MainWindow::processData()
                 plot();
             }
             break;
-        } // end of: case 0: ASCII
-        case 1: // RAW
+        } // end of: case ASCII
+        case RAW:
         {
             long Data = 0;
             switch (p.byteNbr)
@@ -253,11 +270,12 @@ void MainWindow::processData()
                            checksum = 0;
                     }
                     break;
-                }
+                } // end of: case RAW:
                 default:
                     break;
             } // end of: switch (p.byteNbr)
             QString strAscii = QString::number(Data);
+
             QByteArray baAscii = strAscii.toUtf8();
             baAscii.append(13);
             // update console
@@ -289,6 +307,11 @@ void MainWindow::processData()
             }
         break;
         } // end of: case 1: RAW
+        case STM32_BOOTLOADER_MODE:
+        {
+            m_stm32Interpreter.parseCmd(ui->m_console, rxData);
+            break;
+        }
         default:
         break;
     } // end of: switch (p.dataFormat)
@@ -476,6 +499,8 @@ bool MainWindow::isConnected()
 
 void MainWindow::sendToPort()
 {
+    // flush the serial port
+    m_serial->clear();
 
     // get the parsing settings
     const serialParsingSettingsDialog::parsingSettings p = m_parsingSettingsDialog->getParsingSettings();
@@ -487,7 +512,7 @@ void MainWindow::sendToPort()
 
     switch (p.dataFormat)
     {
-        case 0 : // send as ASCII
+        case ASCII:
         {
 
             if (ui->crCheckBox->isChecked())
@@ -505,7 +530,7 @@ void MainWindow::sendToPort()
             }
             break;
         }
-        case 1: // raw
+        case RAW:
         {
             QByteArray txBuffer;
             int nbrBytes = 0;
@@ -535,7 +560,58 @@ void MainWindow::sendToPort()
             m_serial->write(txBuffer);
             break;
         }
+        case STM32_BOOTLOADER_MODE:
+        {
+            // get the command as an ASCII string from the TX text edit box
+
+            if ((bArray[0] == '0')&&(bArray[1] == 'x'))
+            {
+                QString tempChar;
+                tempChar.append((QChar)bArray[2]);
+                tempChar.append((QChar)bArray[3]);
+                bool ok;
+                // get the HEX value from the ASCII string
+                int hex_cmd = tempChar.toInt(&ok, 16);
+                tempChar.clear(); // clear the temp buffer
+                // send the command to the serial port
+                if (hex_cmd == WRITE_MEMORY_CMD)
+                {
+                    QByteArray data = m_stm32bootloaderDialog->getDataFromHexFile();
+                    if (m_stm32bootloaderDialog->isFileOpened())
+                    {
+                        m_stm32Interpreter.updateFirmware(m_serial, ui->m_console,
+                                          m_stm32bootloaderDialog->getAddress(),
+                                          data,
+                                          m_stm32bootloaderDialog->getLength());
+                    }
+                }
+                else
+                {
+                    m_stm32Interpreter.sendCmd(m_serial, hex_cmd);
+                }
+
+
+            } // end of: if ((bArray[0] == '0')&&(bArray[1] == 'x'))
+
+            break;
+        }
         default:
             break;
     } // end of: switch (p.dataFormat)
 }
+
+void MainWindow::updateParsingSettings()
+{
+    if (ui->asciiFormatCheckbox->isChecked())
+    {
+        m_parsingSettingsDialog->setParsingSettings(ASCII);
+    }
+    else
+    {
+        if (m_parsingSettingsDialog->getDataFormat() == RAW)
+            m_parsingSettingsDialog->setParsingSettings(RAW);
+        else if (m_parsingSettingsDialog->getDataFormat() == STM32_BOOTLOADER_MODE)
+            m_parsingSettingsDialog->setParsingSettings(STM32_BOOTLOADER_MODE);
+    }
+}
+

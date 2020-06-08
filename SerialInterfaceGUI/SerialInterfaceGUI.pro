@@ -30,7 +30,9 @@ SOURCES += \
     portconnfailuredialog.cpp \
     qcustomplot.cpp \
     serialparsingsettingsdialog.cpp \
-    serialportsettings.cpp
+    serialportsettings.cpp \
+    stm32bootloaderdialog.cpp \
+    stm32interpreter.cpp
 
 HEADERS += \
     console.h \
@@ -40,7 +42,9 @@ HEADERS += \
     portconnfailuredialog.h \
     qcustomplot.h \
     serialparsingsettingsdialog.h \
-    serialportsettings.h
+    serialportsettings.h \
+    stm32bootloaderdialog.h \
+    stm32interpreter.h
 
 FORMS += \
     loggingsettingsdialog.ui \
@@ -48,7 +52,8 @@ FORMS += \
     openfilefailuredialog.ui \
     parsingSettingsDialog.ui \
     portSettingsDialog.ui \
-    portconnfailuredialog.ui
+    portconnfailuredialog.ui \
+    stm32bootloaderdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

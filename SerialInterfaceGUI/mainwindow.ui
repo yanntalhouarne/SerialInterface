@@ -26,7 +26,7 @@
    <widget class="QWidget" name="TerminalWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>30</x>
       <y>20</y>
       <width>541</width>
       <height>61</height>
@@ -40,11 +40,18 @@
       <rect>
        <x>0</x>
        <y>10</y>
-       <width>531</width>
+       <width>541</width>
        <height>44</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="4">
+       <widget class="QPushButton" name="DisconnectButton">
+        <property name="text">
+         <string>Disconnect</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="3">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
@@ -56,24 +63,17 @@
         </item>
        </layout>
       </item>
-      <item row="0" column="2" alignment="Qt::AlignTop">
-       <widget class="QComboBox" name="term_comboBox">
-        <property name="currentIndex">
-         <number>-1</number>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4">
-       <widget class="QPushButton" name="DisconnectButton">
-        <property name="text">
-         <string>Disconnect</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="5">
        <widget class="QPushButton" name="RefreshButton">
         <property name="text">
          <string>Refresh</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" alignment="Qt::AlignTop">
+       <widget class="QComboBox" name="term_comboBox">
+        <property name="currentIndex">
+         <number>-1</number>
         </property>
        </widget>
       </item>
@@ -86,7 +86,7 @@
          </font>
         </property>
         <property name="text">
-         <string>       Available ports:</string>
+         <string>Available ports:</string>
         </property>
        </widget>
       </item>
@@ -96,7 +96,7 @@
    <widget class="QWidget" name="ConsoleWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>130</y>
       <width>551</width>
       <height>411</height>
@@ -110,7 +110,7 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>541</width>
+       <width>551</width>
        <height>361</height>
       </rect>
      </property>
@@ -161,7 +161,7 @@
    <widget class="QWidget" name="plotWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>570</x>
+      <x>580</x>
       <y>70</y>
       <width>731</width>
       <height>481</height>
@@ -255,8 +255,8 @@
    <widget class="QLabel" name="yAxisRangeLabel">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>30</y>
+      <x>840</x>
+      <y>40</y>
       <width>64</width>
       <height>16</height>
      </rect>
@@ -268,8 +268,8 @@
    <widget class="QCheckBox" name="yAxisAutoRangeCheckbox">
     <property name="geometry">
      <rect>
-      <x>900</x>
-      <y>30</y>
+      <x>910</x>
+      <y>40</y>
       <width>47</width>
       <height>19</height>
      </rect>
@@ -281,8 +281,8 @@
    <widget class="QLabel" name="yAxisLowerLabel">
     <property name="geometry">
      <rect>
-      <x>970</x>
-      <y>10</y>
+      <x>980</x>
+      <y>20</y>
       <width>26</width>
       <height>16</height>
      </rect>
@@ -294,8 +294,8 @@
    <widget class="QSpinBox" name="yAxisLowerSpinbox">
     <property name="geometry">
      <rect>
-      <x>950</x>
-      <y>30</y>
+      <x>960</x>
+      <y>40</y>
       <width>71</width>
       <height>23</height>
      </rect>
@@ -304,8 +304,8 @@
    <widget class="QLabel" name="yAxisUpperLabel">
     <property name="geometry">
      <rect>
-      <x>1050</x>
-      <y>10</y>
+      <x>1060</x>
+      <y>20</y>
       <width>28</width>
       <height>16</height>
      </rect>
@@ -317,8 +317,8 @@
    <widget class="QSpinBox" name="yAxisUpperSpinbox">
     <property name="geometry">
      <rect>
-      <x>1030</x>
-      <y>30</y>
+      <x>1040</x>
+      <y>40</y>
       <width>71</width>
       <height>23</height>
      </rect>
@@ -327,7 +327,7 @@
    <widget class="QLabel" name="consoleStatusLabel">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>30</x>
       <y>10</y>
       <width>521</width>
       <height>16</height>
@@ -351,7 +351,7 @@
    <widget class="QTextEdit" name="txConsoleTextEdit">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>50</x>
       <y>90</y>
       <width>421</width>
       <height>31</height>
@@ -361,7 +361,7 @@
    <widget class="QLabel" name="txLabel">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>30</x>
       <y>90</y>
       <width>21</width>
       <height>16</height>
@@ -374,9 +374,9 @@
    <widget class="QPushButton" name="sendButton">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>520</x>
       <y>90</y>
-      <width>41</width>
+      <width>51</width>
       <height>21</height>
      </rect>
     </property>
@@ -387,7 +387,7 @@
    <widget class="QCheckBox" name="crCheckBox">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>480</x>
       <y>90</y>
       <width>41</width>
       <height>19</height>
@@ -400,7 +400,7 @@
    <widget class="QCheckBox" name="lfCheckBox">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>480</x>
       <y>110</y>
       <width>41</width>
       <height>20</height>
@@ -408,6 +408,19 @@
     </property>
     <property name="text">
      <string>LF</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="asciiFormatCheckbox">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>110</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ASCII</string>
     </property>
    </widget>
   </widget>
@@ -451,10 +464,17 @@
     <addaction name="actionStop_logging"/>
     <addaction name="actionConfigure_logging"/>
    </widget>
+   <widget class="QMenu" name="menuSTM32_Bootloader">
+    <property name="title">
+     <string>STM32 Bootloader</string>
+    </property>
+    <addaction name="actionBootloaderConfigure"/>
+   </widget>
    <addaction name="menuPort"/>
    <addaction name="menuConsole"/>
    <addaction name="menuConfigure"/>
    <addaction name="menuLogs"/>
+   <addaction name="menuSTM32_Bootloader"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionConnect">
@@ -511,6 +531,11 @@
    </property>
   </action>
   <action name="actionConfigure_logging">
+   <property name="text">
+    <string>Configure</string>
+   </property>
+  </action>
+  <action name="actionBootloaderConfigure">
    <property name="text">
     <string>Configure</string>
    </property>
