@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle(tr("Serial Port Communicatrion Tool"));
 
 // CONSOLE
-    ui->m_console->setMaximumBlockCount(100);
+   // ui->m_console->setMaximumBlockCount(1000);
 
 // SERIAL PORT
     m_serial = new QSerialPort(this);
@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
 // SETTINGS
     m_settings = new serialPortSettingsDialog(this);
     m_settings->setDefault();
+
 
 // PORT CONNECTION FAILED DIALOG
     m_portConnFailureDialog = new PortConnFailureDialog(this);
@@ -309,8 +310,9 @@ void MainWindow::processData()
         } // end of: case 1: RAW
         case STM32_BOOTLOADER_MODE:
         {
-            m_stm32Interpreter.parseCmd(ui->m_console, rxData);
-            break;
+            // this slot should bne disconnected from the RX signal when STM32_BOOTLOADER_MODE is activated
+            //m_stm32Interpreter.parseCmd(ui->m_console, rxData);
+            //break;
         }
         default:
         break;
@@ -562,36 +564,39 @@ void MainWindow::sendToPort()
         }
         case STM32_BOOTLOADER_MODE:
         {
-            // get the command as an ASCII string from the TX text edit box
-
-            if ((bArray[0] == '0')&&(bArray[1] == 'x'))
+            if (bArray.size() >= 4)
             {
-                QString tempChar;
-                tempChar.append((QChar)bArray[2]);
-                tempChar.append((QChar)bArray[3]);
-                bool ok;
-                // get the HEX value from the ASCII string
-                int hex_cmd = tempChar.toInt(&ok, 16);
-                tempChar.clear(); // clear the temp buffer
-                // send the command to the serial port
-                if (hex_cmd == WRITE_MEMORY_CMD)
-                {
-                    QByteArray data = m_stm32bootloaderDialog->getDataFromHexFile();
-                    if (m_stm32bootloaderDialog->isFileOpened())
-                    {
-                        m_stm32Interpreter.updateFirmware(m_serial, ui->m_console,
-                                          m_stm32bootloaderDialog->getAddress(),
-                                          data,
-                                          m_stm32bootloaderDialog->getLength());
-                    }
-                }
-                else
-                {
-                    m_stm32Interpreter.sendCmd(m_serial, hex_cmd);
-                }
+                // stop asynch mode for the serialport RX
+                disconnect(m_serial, &QSerialPort::readyRead, 0, 0);
 
+                // get the command as an ASCII string from the TX text edit box
+                if ((bArray[0] == '0')&&(bArray[1] == 'x'))
+                {
+                    //get hex settings
+                    stm32bootloaderDialog::hexFileSettings hexSettings = m_stm32bootloaderDialog->getHexSettings();
+                    QString tempChar;
+                    tempChar.append((QChar)bArray[2]);
+                    tempChar.append((QChar)bArray[3]);
+                    // get the HEX value from the ASCII string
+                    bool ok;
+                    int hex_cmd = tempChar.toInt(&ok, 16);
+                    tempChar.clear(); // clear the temp buffer
+                    // if cmd is valid, parse it and start comm with device
+                    if (!ok)
+                        ui->m_console->putData("Command must be in ASCII format.");
+                     else
+                        m_stm32Interpreter.parseCmd(hex_cmd, hexSettings, m_serial, ui->m_console);
 
-            } // end of: if ((bArray[0] == '0')&&(bArray[1] == 'x'))
+                } // end of: if ((bArray[0] == '0')&&(bArray[1] == 'x'))
+
+                // re-enable asynch mode for the serialport RX
+                connect(m_serial, &QSerialPort::readyRead, this, &MainWindow::processData);
+            }
+            else
+            {
+                ui->m_console->putData("Command must be in the following format: 0xXX");
+            }
+
 
             break;
         }

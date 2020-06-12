@@ -28,6 +28,7 @@ SOURCES += \
     mainwindow.cpp \
     openfilefailuredialog.cpp \
     portconnfailuredialog.cpp \
+    progressbardialog.cpp \
     qcustomplot.cpp \
     serialparsingsettingsdialog.cpp \
     serialportsettings.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     mainwindow.h \
     openfilefailuredialog.h \
     portconnfailuredialog.h \
+    progressbardialog.h \
     qcustomplot.h \
     serialparsingsettingsdialog.h \
     serialportsettings.h \
@@ -53,6 +55,7 @@ FORMS += \
     parsingSettingsDialog.ui \
     portSettingsDialog.ui \
     portconnfailuredialog.ui \
+    progressbardialog.ui \
     stm32bootloaderdialog.ui
 
 # Default rules for deployment.

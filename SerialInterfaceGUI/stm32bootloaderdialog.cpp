@@ -14,6 +14,8 @@ stm32bootloaderDialog::stm32bootloaderDialog(QWidget *parent) :
 
     ui->adressLineEdit->setText("08000000");
 
+    //m_hexFileSettings
+
 
     connect(ui->hexFilePathApplyBtn,    &QPushButton::clicked,    this,     &stm32bootloaderDialog::applyHexFileSettings);
     connect(ui->hexFilePathSelectBtn,   &QPushButton::clicked,    this,     &stm32bootloaderDialog::selectHexFile);
@@ -26,12 +28,13 @@ stm32bootloaderDialog::~stm32bootloaderDialog()
 
 bool stm32bootloaderDialog::openHexFile()
 {
+    closeHexFile();
     if (!m_hexFileSettings.hexFile.isOpen())
     {
-        m_hexFileSettings.hexFile.setFileName(m_hexFileSettings.fileName);
         if(m_hexFileSettings.hexFile.open(QIODevice::ReadOnly) && (!isFileOpened()))
         {
             m_hexFileSettings.fileOpened = 1;
+            m_hexFileSettings.length = m_hexFileSettings.hexFile.size();
             return 1;
         }
         else
@@ -49,7 +52,9 @@ void stm32bootloaderDialog::selectHexFile()
 {
     m_hexFileSettings.fileName = QFileDialog::getOpenFileName(this,
         tr("Select file"), ".", tr("BIN Files (*.bin)"));
+    m_hexFileSettings.hexFile.setFileName(m_hexFileSettings.fileName);
     ui->hexFilePathLineEdit->setText(m_hexFileSettings.fileName);
+//    /ui->adressLineEdit->text();
 }
 
 bool stm32bootloaderDialog::isFileOpened()
@@ -67,40 +72,34 @@ void stm32bootloaderDialog::closeHexFile()
 
 void stm32bootloaderDialog::applyHexFileSettings()
 {
-
-    if (!m_hexFileSettings.fileOpened)
+    if (!openHexFile())
     {
-        if (!openHexFile())
-        {
-            m_openFileFailureDialog->show();
-        }
-        else
-        {
-            hide();
-        }
+        m_openFileFailureDialog->show();
     }
     else
-    {
-        // file already open
-        hide();
-    }
-}
-
-QByteArray stm32bootloaderDialog::getDataFromHexFile()
-{
-    QByteArray data;
-
-    if (m_hexFileSettings.fileOpened)
     {
         // get address from lineEdit
         auto addrString = ui->adressLineEdit->text();
         bool ok;
         m_hexFileSettings.adrress = addrString.toLong(&ok, 16);
+        hide();
+    }
+
+}
+
+QByteArray stm32bootloaderDialog::hexFileSettings::getDataFromHexFile()
+{
+    QByteArray data;
+
+    if (fileOpened)
+    {
+        QFile m_hexFile(fileName);
+        m_hexFile.open(QIODevice::ReadOnly);
         // get data from .hex file to byte array
-        if (m_hexFileSettings.length <= 1000000)
-            data = m_hexFileSettings.hexFile.read(1000000); // 1Mb max
+        //if (m_hexFileSettings.length <= 1000000)
+        data = m_hexFile.read(1000000); // 1Mb max
         // get data length
-        m_hexFileSettings.length = data.size();
+        length = data.size();
     }
     else
     {
@@ -118,4 +117,9 @@ long stm32bootloaderDialog::getAddress()
 unsigned int stm32bootloaderDialog::getLength()
 {
     return m_hexFileSettings.length;
+}
+
+stm32bootloaderDialog::hexFileSettings stm32bootloaderDialog::getHexSettings()
+{
+    return m_hexFileSettings;
 }

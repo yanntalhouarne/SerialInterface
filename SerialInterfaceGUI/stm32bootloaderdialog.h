@@ -21,22 +21,28 @@ public:
     explicit stm32bootloaderDialog(QWidget *parent = nullptr);
     ~stm32bootloaderDialog();
 
-    struct hexFileSettings
+    class hexFileSettings
     {
+    public:
+        explicit hexFileSettings() {};
+        hexFileSettings (const hexFileSettings &old_obj) {adrress = old_obj.adrress; length = old_obj.length; fileName = old_obj.fileName; fileOpened = old_obj.fileOpened;} // copy constructor
         QFile hexFile;
         QString fileName;
         bool fileOpened = 0;
         long adrress;
         unsigned int length;
+        QByteArray getDataFromHexFile();
+
     };
 
 public:
     bool isFileOpened();
     void closeHexFile();
     bool openHexFile();
-    QByteArray getDataFromHexFile();
     long getAddress();
     unsigned int getLength();
+    hexFileSettings getHexSettings();
+
 
 private slots:
     void applyHexFileSettings();
