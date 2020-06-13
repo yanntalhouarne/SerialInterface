@@ -220,9 +220,9 @@
     <property name="geometry">
      <rect>
       <x>590</x>
-      <y>70</y>
+      <y>10</y>
       <width>551</width>
-      <height>491</height>
+      <height>551</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -235,9 +235,9 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>0</y>
+       <y>50</y>
        <width>521</width>
-       <height>431</height>
+       <height>451</height>
       </rect>
      </property>
      <property name="minimumSize">
@@ -250,13 +250,13 @@
     <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
-       <x>330</x>
-       <y>460</y>
+       <x>320</x>
+       <y>510</y>
        <width>211</width>
        <height>25</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <layout class="QHBoxLayout" name="xAxisRangeHorizontalLayout">
       <item>
        <widget class="QLabel" name="xAxisRangeLabel">
         <property name="text">
@@ -286,12 +286,12 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>460</y>
+       <y>520</y>
        <width>131</width>
        <height>23</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <layout class="QHBoxLayout" name="PlotClearHorizontalLayout">
       <item>
        <widget class="QCheckBox" name="plotCheckBox">
         <property name="text">
@@ -308,42 +308,109 @@
       </item>
      </layout>
     </widget>
-   </widget>
-   <widget class="QLabel" name="yAxisLowerLabel">
-    <property name="geometry">
-     <rect>
-      <x>1000</x>
-      <y>20</y>
-      <width>26</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <italic>true</italic>
-     </font>
-    </property>
-    <property name="text">
-     <string>lower</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="yAxisUpperLabel">
-    <property name="geometry">
-     <rect>
-      <x>1080</x>
-      <y>20</y>
-      <width>28</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <italic>true</italic>
-     </font>
-    </property>
-    <property name="text">
-     <string>upper</string>
-    </property>
+    <widget class="QLabel" name="yAxisLowerLabel">
+     <property name="geometry">
+      <rect>
+       <x>400</x>
+       <y>0</y>
+       <width>26</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <italic>true</italic>
+      </font>
+     </property>
+     <property name="text">
+      <string>lower</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="yAxisUpperLabel">
+     <property name="geometry">
+      <rect>
+       <x>480</x>
+       <y>0</y>
+       <width>28</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <italic>true</italic>
+      </font>
+     </property>
+     <property name="text">
+      <string>upper</string>
+     </property>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>20</y>
+       <width>310</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="yAxisRangeHorizontalLayout">
+      <item>
+       <widget class="QLabel" name="yAxisRangeLabel">
+        <property name="minimumSize">
+         <size>
+          <width>81</width>
+          <height>16</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>y-axis range:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="yAxisAutoRangeCheckbox">
+        <property name="minimumSize">
+         <size>
+          <width>51</width>
+          <height>19</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>auto</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="yAxisLowerSpinbox">
+        <property name="minimumSize">
+         <size>
+          <width>71</width>
+          <height>23</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="yAxisUpperSpinbox">
+        <property name="minimumSize">
+         <size>
+          <width>71</width>
+          <height>23</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <zorder>plot</zorder>
+    <zorder>layoutWidget</zorder>
+    <zorder>layoutWidget</zorder>
+    <zorder>yAxisRangeLabel</zorder>
+    <zorder>yAxisAutoRangeCheckbox</zorder>
+    <zorder>yAxisLowerSpinbox</zorder>
+    <zorder>yAxisUpperSpinbox</zorder>
+    <zorder>yAxisLowerLabel</zorder>
+    <zorder>yAxisUpperLabel</zorder>
    </widget>
    <widget class="QLabel" name="consoleStatusLabel">
     <property name="geometry">
@@ -445,6 +512,9 @@
     </property>
    </widget>
    <widget class="QFrame" name="frame_3">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>590</x>
@@ -476,75 +546,12 @@
      <enum>QFrame::Raised</enum>
     </property>
    </widget>
-   <widget class="QWidget" name="">
-    <property name="geometry">
-     <rect>
-      <x>840</x>
-      <y>40</y>
-      <width>294</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="yAxisRangeLabel">
-       <property name="minimumSize">
-        <size>
-         <width>81</width>
-         <height>16</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>y-axis range:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="yAxisAutoRangeCheckbox">
-       <property name="minimumSize">
-        <size>
-         <width>51</width>
-         <height>19</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>auto</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="yAxisLowerSpinbox">
-       <property name="minimumSize">
-        <size>
-         <width>71</width>
-         <height>23</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="yAxisUpperSpinbox">
-       <property name="minimumSize">
-        <size>
-         <width>71</width>
-         <height>23</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <zorder>frame_3</zorder>
+   <zorder>layoutWidget</zorder>
    <zorder>frame</zorder>
    <zorder>TerminalWidget</zorder>
    <zorder>ConsoleWidget</zorder>
    <zorder>plotWidget</zorder>
-   <zorder>yAxisRangeLabel</zorder>
-   <zorder>yAxisAutoRangeCheckbox</zorder>
-   <zorder>yAxisLowerLabel</zorder>
-   <zorder>yAxisLowerSpinbox</zorder>
-   <zorder>yAxisUpperLabel</zorder>
-   <zorder>yAxisUpperSpinbox</zorder>
    <zorder>consoleStatusLabel</zorder>
    <zorder>txConsoleTextEdit</zorder>
    <zorder>txLabel</zorder>
