@@ -11,7 +11,9 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle(tr("Serial Port Communicatrion Tool"));
 
 // CONSOLE
-   // ui->m_console->setMaximumBlockCount(1000);
+    ui->rowNbrSpinBox->setRange(1, 5000);
+    ui->rowNbrSpinBox->setValue(100);
+    ui->m_console->setMaximumBlockCount(1000);
 
 // SERIAL PORT
     m_serial = new QSerialPort(this);
@@ -27,9 +29,6 @@ MainWindow::MainWindow(QWidget *parent)
 // PARSING SETTINGS
     m_parsingSettingsDialog = new serialParsingSettingsDialog(this);
 
-    ui->printCheckBox->setChecked(1);
-    ui->plotCheckBox->setChecked(0);
-
     // LOGGING SETTINGS
     m_loggingSettingsDialog = new LoggingSettingsDialog(this);
 
@@ -40,7 +39,8 @@ MainWindow::MainWindow(QWidget *parent)
         ui->term_comboBox->addItem(info.portName());
 
     /* STM32 BOOTLOADER DIALOG */
-    m_stm32bootloaderDialog = new stm32bootloaderDialog(this);
+    m_stm32bootloaderDialog = new stm32bootloaderDialog(this); 
+    m_bootloaderInfoDialog = new bootloaderInfoDialog(m_stm32bootloaderDialog);
 
 
     /* Set up plot */
@@ -56,7 +56,27 @@ MainWindow::MainWindow(QWidget *parent)
     ui->yAxisUpperSpinbox->setRange(-100000, 100000);
     ui->yAxisUpperSpinbox->setValue(yAxisUpper);
 
+/* DEFAULT/INITIAL SETTINGS */
+    ui->actionConnect->setDisabled(0);
+    ui->actionDisconnect->setDisabled(1);
+
+    ui->ConnectButton->setDisabled(0);
+    ui->DisconnectButton->setDisabled(1);
+
+    ui->autoscroll->setChecked(true);
+    ui->consoleStatusLabel->setText("Not connected.");
+
     ui->asciiFormatCheckbox->setChecked(1);
+    ui->parsingLabel->setText("parsing: ASCII");
+    ui->parsingLabel->setToolTip("Received data is in ASCII format.");
+
+    ui->printCheckBox->setChecked(1);
+    ui->plotCheckBox->setToolTip("Data format must be ASCII or CR/CS format.\nSee parsing settings.");
+    ui->plotCheckBox->setChecked(0);
+
+    ui->sendButton->setDisabled(1);
+    ui->lfCheckBox->setChecked(0);
+    ui->crCheckBox->setChecked(0);
 
 
 
@@ -65,14 +85,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionConnect,            &QAction::triggered,      this,                     &MainWindow::connectToPort);
     connect(ui->actionRefresh,            &QAction::triggered,      this,                     &MainWindow::refreshPortList);
     connect(ui->actionDisconnect,         &QAction::triggered,      this,                     &MainWindow::disconnectToPort);
-    ui->actionConnect->setDisabled(0);
-    ui->actionDisconnect->setDisabled(1);
+    connect(ui->actionConfigurePort,      &QAction::triggered,      m_settings,               &serialPortSettingsDialog::show);
     // CONSOLE
     connect(ui->actionClear,              &QAction::triggered,      this,                     &MainWindow::clearTextEdit);
     connect(ui->actionToggle_Auto_Scroll, &QAction::triggered,      ui->autoscroll,           &QCheckBox::toggle);
     connect(ui->actionParsing,            &QAction::triggered,      m_parsingSettingsDialog,  &serialParsingSettingsDialog::show);
-    // SETTING
-    connect(ui->actionConfigurePort,      &QAction::triggered,      m_settings,               &serialPortSettingsDialog::show);
+    connect(ui->rowNbrSpinBox,static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),  this,                  &MainWindow::changeNbrRows);
+    connect(ui->rowNbrSpinBox,           &QSpinBox::editingFinished,                          ui->rowNbrSpinBox, &QSpinBox::clearFocus);
     // LOG
     connect(ui->actionStart_logging,      &QAction::triggered,      this,                     &MainWindow::startLogging);
     connect(ui->actionStop_logging,       &QAction::triggered,      this,                     &MainWindow::stopLogging);
@@ -81,25 +100,21 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionConfigure_logging,  &QAction::hovered,        m_loggingSettingsDialog,  &LoggingSettingsDialog::updateLoggingCheckBox);
     // STM32 BOOTLOADER
     connect(ui->actionBootloaderConfigure,  &QAction::triggered,    m_stm32bootloaderDialog,  &stm32bootloaderDialog::show);
+    connect(ui->actionBootloaderInfo,       &QAction::triggered,    m_bootloaderInfoDialog,   &bootloaderInfoDialog::show);
 
 /* TERMINAL WIDGET */
     connect(ui->ConnectButton,            &QPushButton::clicked,    this,                     &MainWindow::connectToPort);
-    ui->ConnectButton->setDisabled(0);
     connect(ui->DisconnectButton,         &QPushButton::clicked,    this,                     &MainWindow::disconnectToPort);
-    ui->DisconnectButton->setDisabled(1);
     connect(ui->RefreshButton,            &QPushButton::clicked,    this,                     &MainWindow::refreshPortList);
     connect(m_serial,                     &QSerialPort::readyRead,  this,                     &MainWindow::processData);
     connect(ui->autoscroll,               &QCheckBox::stateChanged, this,                     &MainWindow::changeScrolling);
     connect(ui->clearButton,              &QPushButton::clicked,    this,                     &MainWindow::clearTextEdit);
-    ui->autoscroll->setChecked(true);
-    ui->consoleStatusLabel->setText("Not connected.");
+    connect(m_parsingSettingsDialog->getApplyButton(), &QPushButton::clicked, this, &MainWindow::updateParsingLabelAndCheckbox);
+
 
 /* TX CONSOLE */
     connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::sendToPort);
-    ui->sendButton->setDisabled(1);
-    ui->lfCheckBox->setChecked(1);
-    ui->crCheckBox->setChecked(0);
-    connect(ui->asciiFormatCheckbox, &QCheckBox::stateChanged, this, &MainWindow::updateParsingSettings);
+    connect(ui->asciiFormatCheckbox, &QCheckBox::stateChanged, this, &MainWindow::updateParsingSettingsFromCheckBox);
 
 
 /* PLOT WIDGET */
@@ -111,7 +126,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->yAxisLowerSpinbox,        &QSpinBox::editingFinished,                            ui->yAxisLowerSpinbox, &QSpinBox::clearFocus);
     connect(ui->yAxisUpperSpinbox,        &QSpinBox::editingFinished,                            ui->yAxisUpperSpinbox, &QSpinBox::clearFocus);
     connect(ui->xAxisAutoRangeCheckbox,   &QCheckBox::stateChanged,                              this,                  &MainWindow::changeAxisAutoRange);
-    connect(ui->yAxisAutoRangeCheckbox,   &QCheckBox::stateChanged,                              this,                  &MainWindow::changeAxisAutoRange);
+
 
 }
 
@@ -166,15 +181,6 @@ void MainWindow::connectToPort()
                     .arg(p.stringStopBits)
                     .arg(p.stringFlowControl));
         ui->sendButton->setDisabled(0);
-        auto m = m_parsingSettingsDialog->getParsingSettings();
-        if (m.dataFormat == ASCII)
-        {
-            ui->asciiFormatCheckbox->setChecked(1);
-        }
-        else
-        {
-            ui->asciiFormatCheckbox->setChecked(0);
-        }
     }
 }
 
@@ -224,7 +230,19 @@ void MainWindow::processData()
             }
             break;
         } // end of: case ASCII
-        case RAW:
+        case RAW_BYTE_FORMAT:
+        {
+            for (int i = 0; i < rxData.size(); i++)
+            {
+               // update console
+               if (ui->printCheckBox->isChecked())
+               {
+                    ui->m_console->putData(rxData);
+               }
+            }
+            break;
+        } // end of: case ASCII
+        case RAW_DATA_CHECKSUM:
         {
             long Data = 0;
             switch (p.byteNbr)
@@ -450,6 +468,11 @@ void MainWindow::changeAxisAutoRange()
 
 }
 
+void MainWindow::changeNbrRows(int val)
+{
+    ui->m_console->setMaximumBlockCount(val);
+}
+
 void MainWindow::stopLogging()
 {
     startedLoggingToFile = 0;
@@ -532,7 +555,7 @@ void MainWindow::sendToPort()
             }
             break;
         }
-        case RAW:
+        case RAW_DATA_CHECKSUM:
         {
             QByteArray txBuffer;
             int nbrBytes = 0;
@@ -605,18 +628,75 @@ void MainWindow::sendToPort()
     } // end of: switch (p.dataFormat)
 }
 
-void MainWindow::updateParsingSettings()
-{
+void MainWindow::updateParsingSettingsFromCheckBox()
+{   
     if (ui->asciiFormatCheckbox->isChecked())
     {
         m_parsingSettingsDialog->setParsingSettings(ASCII);
-    }
+        ui->parsingLabel->setText("parsing: ASCII");
+        ui->parsingLabel->setToolTip("Received data is in ASCII format.");
+    } 
     else
     {
-        if (m_parsingSettingsDialog->getDataFormat() == RAW)
-            m_parsingSettingsDialog->setParsingSettings(RAW);
-        else if (m_parsingSettingsDialog->getDataFormat() == STM32_BOOTLOADER_MODE)
-            m_parsingSettingsDialog->setParsingSettings(STM32_BOOTLOADER_MODE);
+        m_parsingSettingsDialog->setParsingSettings(RAW_BYTE_FORMAT);
+        ui->parsingLabel->setText("parsing: raw bytes");
+        ui->parsingLabel->setToolTip("Received bytes are printed as they arrived.");
+
     }
 }
+
+void MainWindow::updateParsingLabelAndCheckbox()
+{
+
+    switch (m_parsingSettingsDialog->getDataFormat())
+    {
+        case ASCII:
+        {
+            ui->asciiFormatCheckbox->setCheckState(Qt::CheckState::Checked);
+            ui->plotCheckBox->setDisabled(0);
+            ui->parsingLabel->setText("parsing: ASCII");
+            ui->parsingLabel->setToolTip("Received data is in ASCII format.");
+            break;
+        }
+        case RAW_DATA_CHECKSUM:
+        {
+            ui->asciiFormatCheckbox->setCheckState(Qt::CheckState::Unchecked);
+            ui->plotCheckBox->setDisabled(0);
+            if (m_parsingSettingsDialog->getNbrBytes() == 1)
+            {
+                ui->parsingLabel->setText("parsing: [DATA][13][CS]");
+                ui->parsingLabel->setToolTip("-data format: [DATA][13][CS]\n-CS = [DATA0]^[13]");
+            }
+            else if (m_parsingSettingsDialog->getNbrBytes() == 2)
+            {
+                ui->parsingLabel->setText("parsing: [LSB][MSB][13][CS]");
+                ui->parsingLabel->setToolTip("-data format: [LSB][MSB][13][CS]\n-CS = [LSB]^[MSB]^[13])");
+            }
+            else if (m_parsingSettingsDialog->getNbrBytes() == 4)
+            {
+                ui->parsingLabel->setText("parsing: [LSB][DATA][DATA][MSB][13][CS]");
+                ui->parsingLabel->setToolTip("-data format: [LSB][DATA1][DATA2][MSB][13][CS]\n-CS = [LSB]^[DATA1]^[DATA2]^[MSB]^[13])");
+            }
+            break;
+        }
+        case STM32_BOOTLOADER_MODE:
+        {
+            ui->asciiFormatCheckbox->setCheckState(Qt::CheckState::Unchecked);
+            ui->plotCheckBox->setCheckState(Qt::CheckState::Unchecked);
+            ui->plotCheckBox->setDisabled(1);
+            ui->parsingLabel->setText("parsing: STM32 Bootloader");
+            break;
+        }
+        case RAW_BYTE_FORMAT:
+        {
+            ui->asciiFormatCheckbox->setCheckState(Qt::CheckState::Unchecked);
+            ui->plotCheckBox->setCheckState(Qt::CheckState::Unchecked);
+            ui->plotCheckBox->setDisabled(1);
+            ui->parsingLabel->setText("parsing: raw bytes");
+            ui->parsingLabel->setToolTip("Received bytes are printed as they arrived.");
+            break;
+        }
+    }
+}
+
 

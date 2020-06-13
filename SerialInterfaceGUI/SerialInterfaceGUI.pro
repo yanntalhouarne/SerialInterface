@@ -22,6 +22,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    bootloaderinfodialog.cpp \
     console.cpp \
     loggingsettingsdialog.cpp \
     main.cpp \
@@ -36,6 +37,7 @@ SOURCES += \
     stm32interpreter.cpp
 
 HEADERS += \
+    bootloaderinfodialog.h \
     console.h \
     loggingsettingsdialog.h \
     mainwindow.h \
@@ -49,6 +51,7 @@ HEADERS += \
     stm32interpreter.h
 
 FORMS += \
+    bootloaderinfodialog.ui \
     loggingsettingsdialog.ui \
     mainwindow.ui \
     openfilefailuredialog.ui \

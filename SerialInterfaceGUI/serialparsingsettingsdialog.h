@@ -6,8 +6,9 @@
 #include <QDialog>
 #include <QPushButton>
 #define ASCII 0
-#define RAW 1
-#define STM32_BOOTLOADER_MODE 2
+#define RAW_BYTE_FORMAT 1
+#define RAW_DATA_CHECKSUM 2
+#define STM32_BOOTLOADER_MODE 3
 
 QT_BEGIN_NAMESPACE
 
@@ -21,6 +22,7 @@ class serialParsingSettingsDialog : public QDialog
 public:
     serialParsingSettingsDialog(QWidget *parent = nullptr);
     ~serialParsingSettingsDialog();
+    QPushButton * getApplyButton();
 
 public:
     struct parsingSettings
@@ -32,6 +34,7 @@ public:
 
     parsingSettings getParsingSettings() const; // returns a copy of pSettings
     unsigned int getDataFormat();
+    unsigned int getNbrBytes();
 
     //void setDataFormatSpinBox(int parsingSettings);
 

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>bootloaderInfoDialog</class>
+ <widget class="QDialog" name="bootloaderInfoDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>447</width>
+    <height>181</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QPlainTextEdit" name="plainTextEdit">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>451</width>
+     <height>181</height>
+    </rect>
+   </property>
+   <property name="plainText">
+    <string>		SUPPORTED COMMANDS:
+
+- INIT (0x7F): initialize the STM32 device. The device must be in bootloader mode.
+
+- GET_ID (0x02): get the ID of the STM32 device.
+
+- ERASE_SECTORS_0_TO_4 (0x98): erases sectors 0, 1, 2, 3 and 4.
+
+- UPLOAD_BIN_FILE (0x99): writes the content of the selected BIN file to flash memory.
+
+
+Tested on STM32F72xx.
+</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

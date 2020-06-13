@@ -11,15 +11,23 @@ serialParsingSettingsDialog::serialParsingSettingsDialog(QWidget *parent)
 
     // DATA FORMAT COMBO BOX INIT
     ui->dataFormatComboBox->addItem("ASCII");
-    ui->dataFormatComboBox->addItem("raw");
+    ui->dataFormatComboBox->setItemData(0, "Received data is in ASCII format.", Qt::ToolTipRole);
+    ui->dataFormatComboBox->addItem("raw bytes");
+    ui->dataFormatComboBox->setItemData(1, "Received bytes are printed as they arrived.", Qt::ToolTipRole);
+    ui->dataFormatComboBox->addItem("raw bytes w/ checksum");
+    ui->dataFormatComboBox->setItemData(2, "Received data has a CR (13) character and checksum.", Qt::ToolTipRole);
     ui->dataFormatComboBox->addItem("STM32 bootloader");
-    ui->dataFormatComboBox->setCurrentIndex(0);
+    ui->dataFormatComboBox->setItemData(3, "Supported commands:\n     -INIT (0x7F)\n     -GET_ID (0x02)\n     -ERASE_SECTORS_0_TO_4 (0x98)\n     -UPLOAD_BIN_FILE (0x99)", Qt::ToolTipRole);
+    m_parsingSettings.dataFormat = ASCII;
 
 
     // NUMBER OF BYTES COMBO BOX INIT
     ui->nbrBytesComboBox->addItem("1");
+    ui->nbrBytesComboBox->setItemData(0, "-data format: [DATA][13][CS]\n-CS = [DATA0]^[13])", Qt::ToolTipRole);
     ui->nbrBytesComboBox->addItem("2");
+    ui->nbrBytesComboBox->setItemData(1, "-data format: [LSB][MSB][13][CS]\n-CS = [LSB]^[MSB]^[13])", Qt::ToolTipRole);
     ui->nbrBytesComboBox->addItem("4");
+    ui->nbrBytesComboBox->setItemData(2, "-data format: [LSB][DATA1][DATA2][MSB][13][CS]\n-CS = [LSB]^[DATA1]^[DATA2]^[MSB]^[13])", Qt::ToolTipRole);
     ui->nbrBytesComboBox->setCurrentIndex(1);
     ui->nbrBytesComboBox->setDisabled(1);
 
@@ -36,6 +44,11 @@ serialParsingSettingsDialog::~serialParsingSettingsDialog()
     delete ui;
 }
 
+QPushButton * serialParsingSettingsDialog::getApplyButton()
+{
+    return ui->parsingSettingsApplyButton;
+}
+
 void serialParsingSettingsDialog::applyParsingSettings()
 {
    m_parsingSettings.dataFormat = ui->dataFormatComboBox->currentIndex();
@@ -45,7 +58,7 @@ void serialParsingSettingsDialog::applyParsingSettings()
 
 void serialParsingSettingsDialog::showByteNbr(int idx)
 {
-    if (idx == 1) // RAW
+    if (idx == RAW_DATA_CHECKSUM) // RAW
     {
         ui->nbrBytesComboBox->setEnabled(1);
     }
@@ -67,6 +80,11 @@ unsigned int serialParsingSettingsDialog::getDataFormat()
     return m_parsingSettings.dataFormat;
 }
 
+unsigned int serialParsingSettingsDialog::getNbrBytes()
+{
+    return m_parsingSettings.byteNbr;
+}
+
 void serialParsingSettingsDialog::setParsingSettings(int parsingSetting)
 {
     switch (parsingSetting)
@@ -77,10 +95,16 @@ void serialParsingSettingsDialog::setParsingSettings(int parsingSetting)
             ui->dataFormatComboBox->setCurrentIndex(ASCII);
             break;
         }
-        case RAW:
+        case RAW_BYTE_FORMAT:
         {
-            m_parsingSettings.dataFormat = RAW;
-            ui->dataFormatComboBox->setCurrentIndex(RAW);
+            m_parsingSettings.dataFormat = RAW_BYTE_FORMAT;
+            ui->dataFormatComboBox->setCurrentIndex(RAW_BYTE_FORMAT);
+            break;
+        }
+        case RAW_DATA_CHECKSUM:
+        {
+            m_parsingSettings.dataFormat = RAW_DATA_CHECKSUM;
+            ui->dataFormatComboBox->setCurrentIndex(RAW_DATA_CHECKSUM);
             break;
         }
         case STM32_BOOTLOADER_MODE:

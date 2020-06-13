@@ -29,6 +29,7 @@
 #include "portconnfailuredialog.h"
 #include "stm32interpreter.h"
 #include "stm32bootloaderdialog.h"
+#include "bootloaderinfodialog.h"
 
 /* THIRD PARTY */
 #include "qcustomplot.h"
@@ -64,11 +65,13 @@ private slots:
     void changeLowerAxisRange_Y(int val);
     void changeUpperAxisRange_Y(int val);
     void changeAxisAutoRange();
+    void changeNbrRows(int val);
     void stopLogging();
     void startLogging();
     void checkLogEnabledFlag();
     void sendToPort();
-    void updateParsingSettings();
+    void updateParsingSettingsFromCheckBox();
+    void updateParsingLabelAndCheckbox();
 
 private:
     Ui::MainWindow * ui;
@@ -78,6 +81,7 @@ private:
     PortConnFailureDialog * m_portConnFailureDialog = nullptr;
     LoggingSettingsDialog * m_loggingSettingsDialog = nullptr;
     stm32bootloaderDialog * m_stm32bootloaderDialog = nullptr;
+    bootloaderInfoDialog * m_bootloaderInfoDialog = nullptr;
     QVector<double> qv_x, qv_y; // for plotting
     bool startedLoggingToFile = 0;
     bool connectedToPort = 0;
