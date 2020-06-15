@@ -62,11 +62,13 @@ public:
     Console *m_console;
     QWidget *layoutWidget1;
     QHBoxLayout *horizontalLayout;
-    QCheckBox *printCheckBox;
     QCheckBox *autoscroll;
     QLabel *label;
     QSpinBox *rowNbrSpinBox;
     QLabel *parsingLabel;
+    QWidget *widget;
+    QHBoxLayout *horizontalLayout_2;
+    QCheckBox *printCheckBox;
     QPushButton *clearButton;
     QWidget *plotWidget;
     QCustomPlot *plot;
@@ -81,7 +83,7 @@ public:
     QPushButton *clearPlot;
     QLabel *yAxisLowerLabel;
     QLabel *yAxisUpperLabel;
-    QWidget *widget;
+    QWidget *layoutWidget4;
     QHBoxLayout *yAxisRangeHorizontalLayout;
     QLabel *yAxisRangeLabel;
     QCheckBox *yAxisAutoRangeCheckbox;
@@ -96,6 +98,7 @@ public:
     QCheckBox *asciiFormatCheckbox;
     QFrame *frame_3;
     QFrame *frame;
+    QFrame *frame_2;
     QMenuBar *menubar;
     QMenu *menuPort;
     QMenu *menuConsole;
@@ -108,7 +111,8 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->resize(1159, 604);
-        MainWindow->setMinimumSize(QSize(1152, 604));
+        MainWindow->setMinimumSize(QSize(1159, 604));
+        MainWindow->setMaximumSize(QSize(1159, 604));
         MainWindow->setAutoFillBackground(false);
         actionConnect = new QAction(MainWindow);
         actionConnect->setObjectName(QString::fromUtf8("actionConnect"));
@@ -145,7 +149,7 @@ public:
         TerminalWidget->setAutoFillBackground(false);
         layoutWidget = new QWidget(TerminalWidget);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(0, 23, 531, 31));
+        layoutWidget->setGeometry(QRect(0, 20, 531, 25));
         gridLayout = new QGridLayout(layoutWidget);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
@@ -194,19 +198,14 @@ public:
         m_console->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         layoutWidget1 = new QWidget(ConsoleWidget);
         layoutWidget1->setObjectName(QString::fromUtf8("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(10, 390, 311, 25));
+        layoutWidget1->setGeometry(QRect(320, 400, 221, 25));
         horizontalLayout = new QHBoxLayout(layoutWidget1);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        printCheckBox = new QCheckBox(layoutWidget1);
-        printCheckBox->setObjectName(QString::fromUtf8("printCheckBox"));
-        printCheckBox->setMaximumSize(QSize(61, 19));
-
-        horizontalLayout->addWidget(printCheckBox);
-
         autoscroll = new QCheckBox(layoutWidget1);
         autoscroll->setObjectName(QString::fromUtf8("autoscroll"));
         autoscroll->setMinimumSize(QSize(91, 20));
+        autoscroll->setMaximumSize(QSize(91, 20));
 
         horizontalLayout->addWidget(autoscroll);
 
@@ -218,6 +217,7 @@ public:
 
         rowNbrSpinBox = new QSpinBox(layoutWidget1);
         rowNbrSpinBox->setObjectName(QString::fromUtf8("rowNbrSpinBox"));
+        rowNbrSpinBox->setMaximumSize(QSize(61, 23));
 
         horizontalLayout->addWidget(rowNbrSpinBox);
 
@@ -227,21 +227,35 @@ public:
         QFont font1;
         font1.setItalic(true);
         parsingLabel->setFont(font1);
-        clearButton = new QPushButton(ConsoleWidget);
+        widget = new QWidget(ConsoleWidget);
+        widget->setObjectName(QString::fromUtf8("widget"));
+        widget->setGeometry(QRect(10, 400, 129, 23));
+        horizontalLayout_2 = new QHBoxLayout(widget);
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
+        printCheckBox = new QCheckBox(widget);
+        printCheckBox->setObjectName(QString::fromUtf8("printCheckBox"));
+        printCheckBox->setMaximumSize(QSize(61, 19));
+
+        horizontalLayout_2->addWidget(printCheckBox);
+
+        clearButton = new QPushButton(widget);
         clearButton->setObjectName(QString::fromUtf8("clearButton"));
-        clearButton->setGeometry(QRect(470, 400, 74, 21));
         clearButton->setMaximumSize(QSize(74, 21));
+
+        horizontalLayout_2->addWidget(clearButton);
+
         plotWidget = new QWidget(centralwidget);
         plotWidget->setObjectName(QString::fromUtf8("plotWidget"));
         plotWidget->setGeometry(QRect(590, 10, 551, 551));
         plotWidget->setMinimumSize(QSize(500, 401));
         plot = new QCustomPlot(plotWidget);
         plot->setObjectName(QString::fromUtf8("plot"));
-        plot->setGeometry(QRect(10, 50, 521, 451));
+        plot->setGeometry(QRect(10, 60, 521, 451));
         plot->setMinimumSize(QSize(521, 311));
         layoutWidget2 = new QWidget(plotWidget);
         layoutWidget2->setObjectName(QString::fromUtf8("layoutWidget2"));
-        layoutWidget2->setGeometry(QRect(320, 510, 211, 25));
+        layoutWidget2->setGeometry(QRect(320, 520, 211, 25));
         xAxisRangeHorizontalLayout = new QHBoxLayout(layoutWidget2);
         xAxisRangeHorizontalLayout->setObjectName(QString::fromUtf8("xAxisRangeHorizontalLayout"));
         xAxisRangeHorizontalLayout->setContentsMargins(0, 0, 0, 0);
@@ -279,49 +293,46 @@ public:
 
         yAxisLowerLabel = new QLabel(plotWidget);
         yAxisLowerLabel->setObjectName(QString::fromUtf8("yAxisLowerLabel"));
-        yAxisLowerLabel->setGeometry(QRect(400, 0, 26, 16));
+        yAxisLowerLabel->setGeometry(QRect(410, 0, 26, 16));
         yAxisLowerLabel->setFont(font1);
         yAxisUpperLabel = new QLabel(plotWidget);
         yAxisUpperLabel->setObjectName(QString::fromUtf8("yAxisUpperLabel"));
         yAxisUpperLabel->setGeometry(QRect(480, 0, 28, 16));
         yAxisUpperLabel->setFont(font1);
-        widget = new QWidget(plotWidget);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(220, 20, 310, 25));
-        yAxisRangeHorizontalLayout = new QHBoxLayout(widget);
+        layoutWidget4 = new QWidget(plotWidget);
+        layoutWidget4->setObjectName(QString::fromUtf8("layoutWidget4"));
+        layoutWidget4->setGeometry(QRect(259, 20, 281, 25));
+        yAxisRangeHorizontalLayout = new QHBoxLayout(layoutWidget4);
         yAxisRangeHorizontalLayout->setObjectName(QString::fromUtf8("yAxisRangeHorizontalLayout"));
         yAxisRangeHorizontalLayout->setContentsMargins(0, 0, 0, 0);
-        yAxisRangeLabel = new QLabel(widget);
+        yAxisRangeLabel = new QLabel(layoutWidget4);
         yAxisRangeLabel->setObjectName(QString::fromUtf8("yAxisRangeLabel"));
         yAxisRangeLabel->setMinimumSize(QSize(81, 16));
 
         yAxisRangeHorizontalLayout->addWidget(yAxisRangeLabel);
 
-        yAxisAutoRangeCheckbox = new QCheckBox(widget);
+        yAxisAutoRangeCheckbox = new QCheckBox(layoutWidget4);
         yAxisAutoRangeCheckbox->setObjectName(QString::fromUtf8("yAxisAutoRangeCheckbox"));
         yAxisAutoRangeCheckbox->setMinimumSize(QSize(51, 19));
 
         yAxisRangeHorizontalLayout->addWidget(yAxisAutoRangeCheckbox);
 
-        yAxisLowerSpinbox = new QSpinBox(widget);
+        yAxisLowerSpinbox = new QSpinBox(layoutWidget4);
         yAxisLowerSpinbox->setObjectName(QString::fromUtf8("yAxisLowerSpinbox"));
         yAxisLowerSpinbox->setMinimumSize(QSize(71, 23));
 
         yAxisRangeHorizontalLayout->addWidget(yAxisLowerSpinbox);
 
-        yAxisUpperSpinbox = new QSpinBox(widget);
+        yAxisUpperSpinbox = new QSpinBox(layoutWidget4);
         yAxisUpperSpinbox->setObjectName(QString::fromUtf8("yAxisUpperSpinbox"));
         yAxisUpperSpinbox->setMinimumSize(QSize(71, 23));
 
         yAxisRangeHorizontalLayout->addWidget(yAxisUpperSpinbox);
 
+        layoutWidget2->raise();
         plot->raise();
         layoutWidget2->raise();
         layoutWidget2->raise();
-        yAxisRangeLabel->raise();
-        yAxisAutoRangeCheckbox->raise();
-        yAxisLowerSpinbox->raise();
-        yAxisUpperSpinbox->raise();
         yAxisLowerLabel->raise();
         yAxisUpperLabel->raise();
         consoleStatusLabel = new QLabel(centralwidget);
@@ -356,12 +367,17 @@ public:
         frame_3->setFrameShadow(QFrame::Raised);
         frame = new QFrame(centralwidget);
         frame->setObjectName(QString::fromUtf8("frame"));
-        frame->setGeometry(QRect(19, 10, 551, 551));
+        frame->setGeometry(QRect(19, 80, 551, 481));
         frame->setFrameShape(QFrame::Box);
         frame->setFrameShadow(QFrame::Raised);
+        frame_2 = new QFrame(centralwidget);
+        frame_2->setObjectName(QString::fromUtf8("frame_2"));
+        frame_2->setGeometry(QRect(20, 10, 551, 61));
+        frame_2->setFrameShape(QFrame::Box);
+        frame_2->setFrameShadow(QFrame::Raised);
         MainWindow->setCentralWidget(centralwidget);
+        frame_2->raise();
         frame_3->raise();
-        layoutWidget2->raise();
         frame->raise();
         TerminalWidget->raise();
         ConsoleWidget->raise();
@@ -435,11 +451,14 @@ public:
         ConnectButton->setText(QCoreApplication::translate("MainWindow", "Connect", nullptr));
         RefreshButton->setText(QCoreApplication::translate("MainWindow", "Refresh", nullptr));
         term_comboBoxLabel->setText(QCoreApplication::translate("MainWindow", "Available ports:", nullptr));
-        printCheckBox->setText(QCoreApplication::translate("MainWindow", "Print", nullptr));
         autoscroll->setText(QCoreApplication::translate("MainWindow", "auto-scroll", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "max rows:", nullptr));
         parsingLabel->setText(QCoreApplication::translate("MainWindow", "parsing: [13][LSB][DATA][DATA][MSB][CS]", nullptr));
+        printCheckBox->setText(QCoreApplication::translate("MainWindow", "Print", nullptr));
         clearButton->setText(QCoreApplication::translate("MainWindow", "Clear", nullptr));
+#if QT_CONFIG(tooltip)
+        plotWidget->setToolTip(QCoreApplication::translate("MainWindow", "Plot", nullptr));
+#endif // QT_CONFIG(tooltip)
         xAxisRangeLabel->setText(QCoreApplication::translate("MainWindow", "x-axis range:", nullptr));
         xAxisAutoRangeCheckbox->setText(QCoreApplication::translate("MainWindow", "auto", nullptr));
         plotCheckBox->setText(QCoreApplication::translate("MainWindow", "Plot", nullptr));
@@ -454,6 +473,12 @@ public:
         crCheckBox->setText(QCoreApplication::translate("MainWindow", "CR", nullptr));
         lfCheckBox->setText(QCoreApplication::translate("MainWindow", "LF", nullptr));
         asciiFormatCheckbox->setText(QCoreApplication::translate("MainWindow", "ASCII", nullptr));
+#if QT_CONFIG(tooltip)
+        frame->setToolTip(QCoreApplication::translate("MainWindow", "Console", nullptr));
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(tooltip)
+        frame_2->setToolTip(QCoreApplication::translate("MainWindow", "Connect to port.", nullptr));
+#endif // QT_CONFIG(tooltip)
         menuPort->setTitle(QCoreApplication::translate("MainWindow", "Port", nullptr));
         menuConsole->setTitle(QCoreApplication::translate("MainWindow", "Console", nullptr));
         menuLogs->setTitle(QCoreApplication::translate("MainWindow", "Logs", nullptr));

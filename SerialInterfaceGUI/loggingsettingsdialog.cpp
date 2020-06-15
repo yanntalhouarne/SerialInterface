@@ -39,6 +39,7 @@ void LoggingSettingsDialog::applyLoggingSettings()
     {
         if (!openFile())
         {
+            m_openFileFailureDialog->setLabel("Could not open file");
             m_openFileFailureDialog->show();
         }
         else

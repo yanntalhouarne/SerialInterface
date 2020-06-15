@@ -27,13 +27,15 @@ public:
     {
         if (OpenFileFailureDialog->objectName().isEmpty())
             OpenFileFailureDialog->setObjectName(QString::fromUtf8("OpenFileFailureDialog"));
-        OpenFileFailureDialog->resize(164, 87);
+        OpenFileFailureDialog->resize(290, 116);
+        OpenFileFailureDialog->setModal(true);
         openFileFailureButton = new QPushButton(OpenFileFailureDialog);
         openFileFailureButton->setObjectName(QString::fromUtf8("openFileFailureButton"));
-        openFileFailureButton->setGeometry(QRect(60, 50, 41, 21));
+        openFileFailureButton->setGeometry(QRect(120, 70, 41, 21));
         openFileFailureLabel = new QLabel(OpenFileFailureDialog);
         openFileFailureLabel->setObjectName(QString::fromUtf8("openFileFailureLabel"));
-        openFileFailureLabel->setGeometry(QRect(40, 20, 101, 16));
+        openFileFailureLabel->setGeometry(QRect(20, 30, 241, 20));
+        openFileFailureLabel->setAlignment(Qt::AlignCenter);
 
         retranslateUi(OpenFileFailureDialog);
 
@@ -42,7 +44,7 @@ public:
 
     void retranslateUi(QDialog *OpenFileFailureDialog)
     {
-        OpenFileFailureDialog->setWindowTitle(QCoreApplication::translate("OpenFileFailureDialog", "Dialog", nullptr));
+        OpenFileFailureDialog->setWindowTitle(QCoreApplication::translate("OpenFileFailureDialog", "File open", nullptr));
         openFileFailureButton->setText(QCoreApplication::translate("OpenFileFailureDialog", "close", nullptr));
         openFileFailureLabel->setText(QCoreApplication::translate("OpenFileFailureDialog", "Could not open file.", nullptr));
     } // retranslateUi

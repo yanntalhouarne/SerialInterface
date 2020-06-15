@@ -1,8 +1,10 @@
 QT       += core gui
 
-QT        += serialport
+QT       += serialport
 
 QT       += core gui printsupport
+
+QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -24,6 +26,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     bootloaderinfodialog.cpp \
     console.cpp \
+    downloadmanager.cpp \
+    downloadurldialog.cpp \
+    genericdialog.cpp \
     loggingsettingsdialog.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -39,6 +44,9 @@ SOURCES += \
 HEADERS += \
     bootloaderinfodialog.h \
     console.h \
+    downloadmanager.h \
+    downloadurldialog.h \
+    genericdialog.h \
     loggingsettingsdialog.h \
     mainwindow.h \
     openfilefailuredialog.h \
@@ -52,6 +60,8 @@ HEADERS += \
 
 FORMS += \
     bootloaderinfodialog.ui \
+    downloadurldialog.ui \
+    genericdialog.ui \
     loggingsettingsdialog.ui \
     mainwindow.ui \
     openfilefailuredialog.ui \

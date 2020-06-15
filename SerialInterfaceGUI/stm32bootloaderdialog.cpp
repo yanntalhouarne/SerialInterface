@@ -12,13 +12,20 @@ stm32bootloaderDialog::stm32bootloaderDialog(QWidget *parent) :
     // FILE OPEN FAILED DIALOG
     m_openFileFailureDialog = new OpenFileFailureDialog(this);
 
+    // GET FILE FROM URL DIALOG
+    m_downloadUrlDialog = new downloadUrlDialog(this);
+
     ui->adressLineEdit->setText("08000000");
 
-    //m_hexFileSettings
 
 
-    connect(ui->hexFilePathApplyBtn,    &QPushButton::clicked,    this,     &stm32bootloaderDialog::applyHexFileSettings);
-    connect(ui->hexFilePathSelectBtn,   &QPushButton::clicked,    this,     &stm32bootloaderDialog::selectHexFile);
+
+
+    connect(ui->hexFilePathApplyBtn,    &QPushButton::clicked,                      this,                 &stm32bootloaderDialog::applyHexFileSettings);
+    connect(ui->hexFilePathSelectBtn,   &QPushButton::clicked,                      this,                 &stm32bootloaderDialog::selectHexFile);
+    connect(ui->downloadUrlPushbutton,  &QPushButton::clicked,                      m_downloadUrlDialog,  &downloadUrlDialog::show);
+    connect(m_downloadUrlDialog,        &downloadUrlDialog::fileDownloadSuccess,    this,                 &stm32bootloaderDialog::getFileFromUrl);
+
 }
 
 stm32bootloaderDialog::~stm32bootloaderDialog()
@@ -54,7 +61,13 @@ void stm32bootloaderDialog::selectHexFile()
         tr("Select file"), ".", tr("BIN Files (*.bin)"));
     m_hexFileSettings.hexFile.setFileName(m_hexFileSettings.fileName);
     ui->hexFilePathLineEdit->setText(m_hexFileSettings.fileName);
-//    /ui->adressLineEdit->text();
+}
+
+void stm32bootloaderDialog::getFileFromUrl()
+{
+    m_hexFileSettings.fileName = m_downloadUrlDialog->getUrlFileName();
+    m_hexFileSettings.hexFile.setFileName(m_hexFileSettings.fileName);
+    ui->hexFilePathLineEdit->setText(m_hexFileSettings.fileName);
 }
 
 bool stm32bootloaderDialog::isFileOpened()

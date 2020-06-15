@@ -17,6 +17,7 @@ class OpenFileFailureDialog : public QDialog
 public:
     explicit OpenFileFailureDialog(QWidget *parent = nullptr);
     ~OpenFileFailureDialog();
+    void setLabel(const QString & strgLabel);
 
 private slots:
     void closeDialog();

@@ -26,11 +26,12 @@ public:
     QPushButton *hexFilePathApplyBtn;
     QLabel *adressLabel;
     QLineEdit *adressLineEdit;
-    QWidget *widget;
+    QWidget *layoutWidget;
     QHBoxLayout *horizontalLayout;
     QLabel *hexFilePathLabel;
     QLineEdit *hexFilePathLineEdit;
     QPushButton *hexFilePathSelectBtn;
+    QPushButton *downloadUrlPushbutton;
 
     void setupUi(QDialog *stm32bootloaderDialog)
     {
@@ -46,28 +47,31 @@ public:
         adressLineEdit = new QLineEdit(stm32bootloaderDialog);
         adressLineEdit->setObjectName(QString::fromUtf8("adressLineEdit"));
         adressLineEdit->setGeometry(QRect(80, 60, 71, 21));
-        widget = new QWidget(stm32bootloaderDialog);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(30, 20, 311, 24));
-        horizontalLayout = new QHBoxLayout(widget);
+        layoutWidget = new QWidget(stm32bootloaderDialog);
+        layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
+        layoutWidget->setGeometry(QRect(30, 20, 311, 24));
+        horizontalLayout = new QHBoxLayout(layoutWidget);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        hexFilePathLabel = new QLabel(widget);
+        hexFilePathLabel = new QLabel(layoutWidget);
         hexFilePathLabel->setObjectName(QString::fromUtf8("hexFilePathLabel"));
 
         horizontalLayout->addWidget(hexFilePathLabel);
 
-        hexFilePathLineEdit = new QLineEdit(widget);
+        hexFilePathLineEdit = new QLineEdit(layoutWidget);
         hexFilePathLineEdit->setObjectName(QString::fromUtf8("hexFilePathLineEdit"));
 
         horizontalLayout->addWidget(hexFilePathLineEdit);
 
-        hexFilePathSelectBtn = new QPushButton(widget);
+        hexFilePathSelectBtn = new QPushButton(layoutWidget);
         hexFilePathSelectBtn->setObjectName(QString::fromUtf8("hexFilePathSelectBtn"));
         hexFilePathSelectBtn->setMaximumSize(QSize(31, 21));
 
         horizontalLayout->addWidget(hexFilePathSelectBtn);
 
+        downloadUrlPushbutton = new QPushButton(stm32bootloaderDialog);
+        downloadUrlPushbutton->setObjectName(QString::fromUtf8("downloadUrlPushbutton"));
+        downloadUrlPushbutton->setGeometry(QRect(280, 50, 61, 21));
 
         retranslateUi(stm32bootloaderDialog);
 
@@ -81,6 +85,7 @@ public:
         adressLabel->setText(QCoreApplication::translate("stm32bootloaderDialog", "Adress:", nullptr));
         hexFilePathLabel->setText(QCoreApplication::translate("stm32bootloaderDialog", ".hex file:", nullptr));
         hexFilePathSelectBtn->setText(QCoreApplication::translate("stm32bootloaderDialog", "...", nullptr));
+        downloadUrlPushbutton->setText(QCoreApplication::translate("stm32bootloaderDialog", "from url", nullptr));
     } // retranslateUi
 
 };

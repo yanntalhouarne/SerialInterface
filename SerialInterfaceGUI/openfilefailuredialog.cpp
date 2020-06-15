@@ -17,6 +17,11 @@ OpenFileFailureDialog::~OpenFileFailureDialog()
     delete ui;
 }
 
+void OpenFileFailureDialog::setLabel(const QString & strgLabel)
+{
+    ui->openFileFailureLabel->setText(strgLabel);
+}
+
 void OpenFileFailureDialog::closeDialog()
 {
     close();

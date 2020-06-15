@@ -8,6 +8,7 @@
 #include <QString>
 
 #include "openfilefailuredialog.h"
+#include "downloadurldialog.h"
 
 namespace Ui {
 class stm32bootloaderDialog;
@@ -47,11 +48,13 @@ public:
 private slots:
     void applyHexFileSettings();
     void selectHexFile();
+    void getFileFromUrl();
 
 private:
     Ui::stm32bootloaderDialog *ui;
     hexFileSettings m_hexFileSettings;
     OpenFileFailureDialog * m_openFileFailureDialog = nullptr;
+    downloadUrlDialog * m_downloadUrlDialog = nullptr;
 };
 
 #endif // STM32BOOTLOADERDIALOG_H
