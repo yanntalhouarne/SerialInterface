@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QLabel>
@@ -26,12 +27,13 @@ public:
     QLabel *dataFormatLabel;
     QLabel *nbrBytesLabel;
     QPushButton *parsingSettingsApplyButton;
+    QCheckBox *checkBox;
 
     void setupUi(QDialog *parsingSettingsDialog)
     {
         if (parsingSettingsDialog->objectName().isEmpty())
             parsingSettingsDialog->setObjectName(QString::fromUtf8("parsingSettingsDialog"));
-        parsingSettingsDialog->resize(258, 128);
+        parsingSettingsDialog->resize(258, 180);
         dataFormatComboBox = new QComboBox(parsingSettingsDialog);
         dataFormatComboBox->setObjectName(QString::fromUtf8("dataFormatComboBox"));
         dataFormatComboBox->setGeometry(QRect(100, 10, 141, 22));
@@ -46,7 +48,10 @@ public:
         nbrBytesLabel->setGeometry(QRect(10, 40, 81, 16));
         parsingSettingsApplyButton = new QPushButton(parsingSettingsDialog);
         parsingSettingsApplyButton->setObjectName(QString::fromUtf8("parsingSettingsApplyButton"));
-        parsingSettingsApplyButton->setGeometry(QRect(90, 80, 80, 21));
+        parsingSettingsApplyButton->setGeometry(QRect(80, 130, 80, 21));
+        checkBox = new QCheckBox(parsingSettingsDialog);
+        checkBox->setObjectName(QString::fromUtf8("checkBox"));
+        checkBox->setGeometry(QRect(100, 90, 91, 19));
 
         retranslateUi(parsingSettingsDialog);
 
@@ -59,6 +64,7 @@ public:
         dataFormatLabel->setText(QCoreApplication::translate("parsingSettingsDialog", "Data format", nullptr));
         nbrBytesLabel->setText(QCoreApplication::translate("parsingSettingsDialog", "Number of bytes", nullptr));
         parsingSettingsApplyButton->setText(QCoreApplication::translate("parsingSettingsDialog", "Apply", nullptr));
+        checkBox->setText(QCoreApplication::translate("parsingSettingsDialog", "Expo filtering", nullptr));
     } // retranslateUi
 
 };

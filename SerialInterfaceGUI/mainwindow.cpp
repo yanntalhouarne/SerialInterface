@@ -244,7 +244,7 @@ void MainWindow::processData()
         } // end of: case ASCII
         case RAW_DATA_CHECKSUM:
         {
-            long Data = 0;
+            double Data = 0;
             switch (p.byteNbr)
             {
                 case 1:
@@ -293,7 +293,15 @@ void MainWindow::processData()
                 default:
                     break;
             } // end of: switch (p.byteNbr)
-            QString strAscii = QString::number(Data);
+
+            // LPF
+            if (p.filtering)
+            {
+                Data = 0.5*Data + 0.5*oldData;
+            }
+            oldData = Data;
+
+            QString strAscii = QString::number((long)Data);
 
             QByteArray baAscii = strAscii.toUtf8();
             baAscii.append(13);
@@ -630,6 +638,8 @@ void MainWindow::sendToPort()
 
 void MainWindow::updateParsingSettingsFromCheckBox()
 {   
+    // get the parsing settings
+    const serialParsingSettingsDialog::parsingSettings p = m_parsingSettingsDialog->getParsingSettings();
     if (ui->asciiFormatCheckbox->isChecked())
     {
         m_parsingSettingsDialog->setParsingSettings(ASCII);
@@ -638,10 +648,7 @@ void MainWindow::updateParsingSettingsFromCheckBox()
     } 
     else
     {
-        m_parsingSettingsDialog->setParsingSettings(RAW_BYTE_FORMAT);
-        ui->parsingLabel->setText("parsing: raw bytes");
-        ui->parsingLabel->setToolTip("Received bytes are printed as they arrived.");
-
+        m_parsingSettingsDialog->setParsingSettings(p.dataFormat);
     }
 }
 

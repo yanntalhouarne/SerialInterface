@@ -83,6 +83,8 @@ private:
     stm32bootloaderDialog * m_stm32bootloaderDialog = nullptr;
     bootloaderInfoDialog * m_bootloaderInfoDialog = nullptr;
     QVector<double> qv_x, qv_y; // for plotting
+    double newData = 0;
+    double oldData = 0;
     bool startedLoggingToFile = 0;
     bool connectedToPort = 0;
     int xAxisRange = 100;

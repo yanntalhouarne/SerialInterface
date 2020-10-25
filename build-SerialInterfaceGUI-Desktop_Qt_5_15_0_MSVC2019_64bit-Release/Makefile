@@ -296,6 +296,7 @@ Makefile: ..\SerialInterfaceGUI\SerialInterfaceGUI.pro C:\Qt\5.15.0\msvc2019_64\
 		C:\Qt\5.15.0\msvc2019_64\lib\Qt5Widgets.prl \
 		C:\Qt\5.15.0\msvc2019_64\lib\Qt5Gui.prl \
 		C:\Qt\5.15.0\msvc2019_64\lib\Qt5SerialPort.prl \
+		C:\Qt\5.15.0\msvc2019_64\lib\Qt5Network.prl \
 		C:\Qt\5.15.0\msvc2019_64\lib\Qt5Core.prl \
 		C:\Qt\5.15.0\msvc2019_64\lib\qtmain.prl \
 		C:\Qt\5.15.0\msvc2019_64\mkspecs\features\build_pass.prf \
@@ -303,6 +304,7 @@ Makefile: ..\SerialInterfaceGUI\SerialInterfaceGUI.pro C:\Qt\5.15.0\msvc2019_64\
 		C:\Qt\5.15.0\msvc2019_64\lib\Qt5Widgetsd.prl \
 		C:\Qt\5.15.0\msvc2019_64\lib\Qt5Guid.prl \
 		C:\Qt\5.15.0\msvc2019_64\lib\Qt5SerialPortd.prl \
+		C:\Qt\5.15.0\msvc2019_64\lib\Qt5Networkd.prl \
 		C:\Qt\5.15.0\msvc2019_64\lib\Qt5Cored.prl \
 		C:\Qt\5.15.0\msvc2019_64\lib\qtmaind.prl
 	$(QMAKE) -o Makefile ..\SerialInterfaceGUI\SerialInterfaceGUI.pro -spec win32-msvc "CONFIG+=qtquickcompiler"
@@ -518,6 +520,7 @@ C:\Qt\5.15.0\msvc2019_64\lib\Qt5PrintSupport.prl:
 C:\Qt\5.15.0\msvc2019_64\lib\Qt5Widgets.prl:
 C:\Qt\5.15.0\msvc2019_64\lib\Qt5Gui.prl:
 C:\Qt\5.15.0\msvc2019_64\lib\Qt5SerialPort.prl:
+C:\Qt\5.15.0\msvc2019_64\lib\Qt5Network.prl:
 C:\Qt\5.15.0\msvc2019_64\lib\Qt5Core.prl:
 C:\Qt\5.15.0\msvc2019_64\lib\qtmain.prl:
 C:\Qt\5.15.0\msvc2019_64\mkspecs\features\build_pass.prf:
@@ -525,6 +528,7 @@ C:\Qt\5.15.0\msvc2019_64\lib\Qt5PrintSupportd.prl:
 C:\Qt\5.15.0\msvc2019_64\lib\Qt5Widgetsd.prl:
 C:\Qt\5.15.0\msvc2019_64\lib\Qt5Guid.prl:
 C:\Qt\5.15.0\msvc2019_64\lib\Qt5SerialPortd.prl:
+C:\Qt\5.15.0\msvc2019_64\lib\Qt5Networkd.prl:
 C:\Qt\5.15.0\msvc2019_64\lib\Qt5Cored.prl:
 C:\Qt\5.15.0\msvc2019_64\lib\qtmaind.prl:
 qmake: FORCE

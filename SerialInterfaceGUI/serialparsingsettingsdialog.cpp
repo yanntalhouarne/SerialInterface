@@ -30,6 +30,7 @@ serialParsingSettingsDialog::serialParsingSettingsDialog(QWidget *parent)
     ui->nbrBytesComboBox->setItemData(2, "-data format: [LSB][DATA1][DATA2][MSB][13][CS]\n-CS = [LSB]^[DATA1]^[DATA2]^[MSB]^[13])", Qt::ToolTipRole);
     ui->nbrBytesComboBox->setCurrentIndex(1);
     ui->nbrBytesComboBox->setDisabled(1);
+    ui->checkBox->setDisabled(1);
 
     applyParsingSettings();
 
@@ -53,6 +54,10 @@ void serialParsingSettingsDialog::applyParsingSettings()
 {
    m_parsingSettings.dataFormat = ui->dataFormatComboBox->currentIndex();
    m_parsingSettings.byteNbr = ui->nbrBytesComboBox->currentText().toUInt();
+   if (ui->checkBox->isChecked() == true)
+        m_parsingSettings.filtering = 1;
+   else
+        m_parsingSettings.filtering = 0;
    hide();
 }
 
@@ -61,11 +66,13 @@ void serialParsingSettingsDialog::showByteNbr(int idx)
     if (idx == RAW_DATA_CHECKSUM) // RAW
     {
         ui->nbrBytesComboBox->setEnabled(1);
+        ui->checkBox->setEnabled(1);
     }
     else // ASCII or STM32_BOOTLOADER_MODE
     {
         ui->nbrBytesComboBox->setCurrentIndex(0);
         ui->nbrBytesComboBox->setDisabled(1);
+        ui->checkBox->setDisabled(1);
     }
 }
 

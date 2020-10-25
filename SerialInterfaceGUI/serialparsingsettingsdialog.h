@@ -30,6 +30,8 @@ public:
         enum dataFormatEnum {ascii, raw};
         unsigned int dataFormat;
         unsigned int byteNbr;
+        bool filtering = 0;
+        double expoFactor = 0.0;
     };
 
     parsingSettings getParsingSettings() const; // returns a copy of pSettings

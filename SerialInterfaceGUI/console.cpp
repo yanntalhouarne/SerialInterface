@@ -19,8 +19,8 @@ void Console::putData(const QByteArray &data)
 
     if (autoScroll)
     {
-        QScrollBar * bar = verticalScrollBar();
-        bar->setValue(bar->maximum());
+//        QScrollBar * bar = verticalScrollBar();
+//        bar->setValue(bar->maximum());
     }
 }
 
